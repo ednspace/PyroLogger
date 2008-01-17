@@ -1,0 +1,38 @@
+
+Starting Nmap 4.20 ( http://insecure.org ) at 2008-01-17 17:02 EST
+Interesting ports on 10.30.102.234:
+Not shown: 1688 closed ports
+PORT      STATE SERVICE
+80/tcp    open  http
+135/tcp   open  msrpc
+139/tcp   open  netbios-ssn
+445/tcp   open  microsoft-ds
+1025/tcp  open  NFS-or-IIS
+1033/tcp  open  netinfo
+5000/tcp  open  UPnP
+9535/tcp  open  man
+27000/tcp open  flexlm0
+
+Interesting ports on 10.30.102.239:
+Not shown: 1690 closed ports
+PORT     STATE SERVICE
+21/tcp   open  ftp
+23/tcp   open  telnet
+80/tcp   open  http
+280/tcp  open  http-mgmt
+515/tcp  open  printer
+631/tcp  open  ipp
+9100/tcp open  jetdirect
+
+Interesting ports on 10.30.102.248:
+Not shown: 1690 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+742/tcp  open  netrcs
+861/tcp  open  unknown
+2049/tcp open  nfs
+
+Nmap finished: 256 IP addresses (3 hosts up) scanned in 48.257 seconds
