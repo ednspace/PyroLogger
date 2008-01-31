@@ -301,6 +301,15 @@ while(1):
     date_float=append(date_float,date2num(datetime.now()))
     thermo_front_float=append(thermo_front_float,farenheit_kiln_1)
     thermo_back_float=append(thermo_back_float,farenheit_kiln_2)
+    
+#Code snippet that list creates a list with all files in a directory
+#Use for load graph section of code
+import os
+path="C:\\somedirectory"  # insert the path to the directory of interest
+here
+dirList=os.listdir(path)
+for fname in dirList:
+    print fname
 
 """
 
