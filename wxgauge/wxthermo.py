@@ -37,8 +37,11 @@ class MainFrame(wx.Frame):
         self.x = []
         #Setup the Plotting Figure and Canvas Load Blank Graph
         self.figure = Figure((8,4) , 75)
-        self.canvas = FigureCanvasWx(self, -1, self.figure)
+        pnl = wx.Panel(self, -1)
+        self.canvas = FigureCanvasWx(pnl, -1, self.figure)
+        #self.canvas = FigureCanvasWx(self, -1, self.figure)
         self.canvas.CenterOnParent()
+        
         self.toolbar = Toolbar(self.canvas)
         self.toolbar.Realize()
         self.load_graph()
@@ -148,6 +151,7 @@ class MainFrame(wx.Frame):
         #self.subplot.plot(self.date, self.kiln_temp, 'r-', linewidth = 1)
         self.subplot.plot(self.x, self.kiln_temp, 'r-', linewidth = 1)
         self.canvas.draw()
+        #self.canvas.Refresh(eraseBackground=False)
 
     def openfile(self, event):
         dlg = wx.FileDialog(self, "Choose a file", os.getcwd(), "", "*.*", wx.OPEN)
