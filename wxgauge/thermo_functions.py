@@ -9,7 +9,8 @@ def get_faren(address):
 	ser.write("F")
 	ser.write(address)
 	ser.write("\r")
-	line = ser.read(5)
+	#line = ser.read(5)
+	line = ser.readline()
 	ser.flushInput()
 	return line
 
@@ -19,7 +20,8 @@ def get_celsius(address):
 	ser.write("C")
 	ser.write(address)
 	ser.write("\r")
-	line = ser.read(5)
+	#line = ser.read(5)
+	line = ser.readline()
 	ser.flushInput()
 	return float(line)
 
@@ -29,7 +31,8 @@ def get_uv(address):
 	ser.write("K")
 	ser.write(address)
 	ser.write("\r")
-	line = ser.read(9)
+	#line = ser.read(9)
+	line = ser.readline()
 	ser.flushInput()
 	return float(line)
 
