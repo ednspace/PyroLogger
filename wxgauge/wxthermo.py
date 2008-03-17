@@ -6,10 +6,11 @@ matplotlib.interactive(False)
 matplotlib.use('WX')
 from matplotlib.backends.backend_wxagg import Toolbar,FigureCanvasWx,FigureManager
 from matplotlib.figure import Figure
+from matplotlib.ticker import ScalarFormatter 
 from matplotlib.dates import date2num
 from matplotlib.dates import num2date
 from matplotlib.dates import DateFormatter
-from matplotlib.dates import HourLocator, MinuteLocator
+from matplotlib.dates import DayLocator,HourLocator, MinuteLocator
 from matplotlib.ticker import Locator, FormatStrFormatter
 
 from datetime import datetime
@@ -36,24 +37,22 @@ class MainFrame(wx.Frame):
         self.count = 0
         self.x = []
         #Setup the Plotting Figure and Canvas Load Blank Graph
-        self.figure = Figure((8,4) , 75)
-        pnl = wx.Panel(self, -1)
-        self.canvas = FigureCanvasWx(pnl, -1, self.figure)
-        #self.canvas = FigureCanvasWx(self, -1, self.figure)
-        self.canvas.CenterOnParent()
-        
-        self.toolbar = Toolbar(self.canvas)
-        self.toolbar.Realize()
         self.load_graph()
+
         #Instantiate the Two Thermometers One for the Kiln One for ambient
-        self.ambient=Thermometer('amb_F',0,0,os.path.join("images",'ambient_F.png'),self)
-        self.kiln=Thermometer('kiln_F_H',675,0,os.path.join("images",'kiln_FH.png'),self)
+        self.ambient=Thermometer('amb_F',0,5,os.path.join("images",'ambient_F.png'),self)
+        self.kiln=Thermometer('kiln_F_H',675,5,os.path.join("images",'kiln_FH.png'),self)
         #Startup the Event timer set it for 3 second roll over
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.onTick,self.timer)
         self.timer.Start(3000)
         #Bind the screen redraws to the PaintAll method in the Thermometer Class
         self.Bind(wx.EVT_PAINT, self.PaintAll)
+        
+        self.GraphTimer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.draw_graph, self.GraphTimer)
+        self.GraphTimer.Start(20000)
+        #self.Bind(wx.EVT_IDLE, self.draw_graph)
         
     
         
@@ -78,8 +77,26 @@ class MainFrame(wx.Frame):
         #Menu Bindings Go here
         self.Bind(wx.EVT_MENU, self.openfile, id=100)
         self.Bind(wx.EVT_MENU, self.about_message, id=103)
-        ###################################################       
+        ################################################### 
+
+        #Button Items
+        ###############################################
+     
+
+        self.save_bitmap = wx.Image(os.path.join("images",'save.png'), wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        self.save_button = wx.BitmapButton(self, 200, bitmap=self.save_bitmap,pos=(250, 10), size = (self.save_bitmap.GetWidth(), self.save_bitmap.GetHeight()))
         
+        self.load_bitmap = wx.Image(os.path.join("images",'load.png'), wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        self.load_button = wx.BitmapButton(self, 201, bitmap=self.load_bitmap,pos=(350, 10), size = (self.load_bitmap.GetWidth()+5, self.load_bitmap.GetHeight()+5))
+        
+        self.log_bitmap = wx.Image(os.path.join("images",'log.png'), wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        self.log_button = wx.BitmapButton(self, 202, bitmap=self.log_bitmap,pos=(450, 10), size = (self.log_bitmap.GetWidth()+5, self.log_bitmap.GetHeight()+5))
+
+        
+        wx.EVT_BUTTON(self, 200, self.OnSave)
+        wx.EVT_BUTTON(self, 201, self.OnLoad)
+        wx.EVT_BUTTON(self, 202, self.OnLog)      
+        ###############################################
         
       
     def onTick(self, event):
@@ -103,7 +120,7 @@ class MainFrame(wx.Frame):
         if (self.kiln_F < self.ambient_F):
             self.kiln_F = self.ambient_F
         
-        print "Ambient===>",self.ambient_F,"kiln Temp===>",self.kiln_F
+        
         
         """
         #------------------------------------------------
@@ -124,7 +141,7 @@ class MainFrame(wx.Frame):
         #Update the thermometer displays
         self.ambient.update_gauge(self.ambient_F)
         #self.kiln.update_gauge(self.kiln_F)
-        self.kiln.update_gauge(1200)         
+        self.kiln.update_gauge(1700)         
     
         #Update the Graph
         self.kiln_temp.append(self.kiln_F)
@@ -132,27 +149,62 @@ class MainFrame(wx.Frame):
   
         self.x.append(self.count)
         self.count = self.count + 1
-        self.draw_graph()   
+        #self.draw_graph()
+        print "Ambient===>",self.ambient_F,"kiln Temp===>",self.kiln_F,"Samples==>",self.count   
     
     def load_graph(self):
-        self.subplot = self.figure.add_subplot(111)
-        #self.subplot.plot(self.date, self.kiln_temp, 'r-', linewidth = 1)
-        self.subplot.plot(self.x, self.kiln_temp, 'r-', linewidth = 1)
-        
         #Set some plot attributes
-        self.subplot.set_title(r"Kiln Temperature")
+        #add_subplot makes an Axes instance and puts it in the Figure instance
+        #self.subplot is this Axes instance, as I had guessed.  
+        #So, you can apply any Axes method to it.
         
-        #ax.xaxis.set_major_formatter(DateFormatter('%H:%M'))
-        #xlabels = ax.get_xticklabels()
-        #ylabels = ax.get_yticklabels()
-        #pylab.setp(ylabels,fontsize=10)
-    
-    def draw_graph(self):
-        #self.subplot.plot(self.date, self.kiln_temp, 'r-', linewidth = 1)
-        self.subplot.plot(self.x, self.kiln_temp, 'r-', linewidth = 1)
-        self.canvas.draw()
-        #self.canvas.Refresh(eraseBackground=False)
+        """
+        fig = P.figure()
+        ax = fig.add_subplot(111)
+        ax.plot_date(dates, y)
+        ax.xaxis.set_major_locator( P.DayLocator() )
+        ax.xaxis.set_minor_locator( P.HourLocator(12))
+        ax.xaxis.set_major_formatter( P.DateFormatter('%Y-%m-%d') )
+        ax.xaxis.set_minor_formatter( P.DateFormatter('%Y-%m-%d %H:%M:%S'))
+        ax.grid(True)
+        fig.autofmt_xdate() 
+        """
 
+        self.figure = Figure((8,4) , 75)
+        #pnl = wx.Panel(self, -1)
+        #self.canvas = FigureCanvasWx(pnl, -1, self.figure)
+        self.canvas = FigureCanvasWx(self, -1, self.figure)
+        self.canvas.CenterOnParent()
+        
+        self.toolbar = Toolbar(self.canvas)
+        self.toolbar.Realize()
+
+        self.subplot = self.figure.add_subplot(111)
+        
+        
+        
+        
+    def draw_graph(self,event):
+        print "updating the graph ;)"
+        
+        self.subplot.clear()
+        self.subplot = self.figure.add_subplot(111)
+        self.subplot.set_title(r"Kiln Temperature")
+
+        #self.subplot.xaxis.set_major_locator( DayLocator() )
+        #self.subplot.xaxis.set_minor_locator( HourLocator(12))
+        #self.subplot.xaxis.set_major_locator( HourLocator(1))
+        #self.subplot.xaxis.set_major_locator( MinuteLocator(10))
+        
+        self.subplot.yaxis.set_major_formatter(ScalarFormatter(False)) 
+        self.subplot.xaxis.set_major_formatter(DateFormatter('%H:%M'))
+        
+        
+        self.subplot.grid(True)
+        self.figure.autofmt_xdate()
+        self.subplot.plot_date(self.date, self.kiln_temp, 'r-', linewidth = 1)
+        self.canvas.draw()
+   
     def openfile(self, event):
         dlg = wx.FileDialog(self, "Choose a file", os.getcwd(), "", "*.*", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
@@ -171,7 +223,16 @@ class MainFrame(wx.Frame):
         self.kiln.OnPaint()
         self.ambient.update_gauge(self.ambient_F)
         #self.kiln.update_gauge(self.kiln_F) 
-        self.kiln.update_gauge(1200) 
+        self.kiln.update_gauge(1200)
+    
+    def OnSave(self,EVENT):
+        print "You Pressed Save"
+
+    def OnLoad(self,EVENT):
+        print "You Pressed Load"
+
+    def OnLog(self,EVENT):
+        print "You Pressed Log" 
   
         
 class Thermometer:
@@ -180,7 +241,6 @@ class Thermometer:
         self.filename=filename
         self.x=x
         self.y=y
-        #self.gauge = wx.Bitmap(os.path.join("images",self.filename))
         self.gauge=wx.Bitmap(self.filename)
         self.frame = frame
         
@@ -191,14 +251,14 @@ class Thermometer:
     def update_gauge(self,temp):
         temp = round(temp,2)
         if(self.scale == 'amb_F'):  #Ambient Farenheit Scale            
-            self.length = 338 - ((temp * 3.2) - 48)
+            self.length = (338 + self.y) - ((temp * 3.2) - 48)
             self.dc.SetPen(wx.Pen('red', 4))
-            self.dc.DrawLine(self.x+58, 330, self.x+58, self.length)
+            self.dc.DrawLine(self.x+58, (330+self.y), self.x+58, self.length)
             
         if(self.scale == 'kiln_F_H'): #Kiln Farenheit High Scale
-            self.length = 338 - ((temp * .16) - 64)
+            self.length = (338 + self.y) - ((temp * .16) - 64)
             self.dc.SetPen(wx.Pen('red', 4))
-            self.dc.DrawLine(self.x+58, 330, self.x+58, self.length)
+            self.dc.DrawLine(self.x+58, (330+self.y), self.x+58, self.length)
         return
         
 class MyApp(wx.App):
