@@ -56,6 +56,10 @@ class MainFrame(wx.Frame):
         #Bind the screen redraws to the PaintAll method in the Thermometer Class
         self.Bind(wx.EVT_PAINT, self.PaintAll)
         
+        #Setup the Clock
+        self.SensorTimer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER,self.OnTick,self.SensorTimer)
+        
         
 
         #Menu Items
@@ -67,6 +71,7 @@ class MainFrame(wx.Frame):
         
         file.Append(100, '&Load', 'Load a saved Graph')
         file.Append(101, '&Save', 'Save the current Graph')
+        file.Append(108, '&Save As...', 'Save the current Graph')
         file.Append(105, '&Start Logging', 'Start logging process')
         file.Append(106, '&Stop Logging', 'Stop logging process')
         file.Append(107, '&Clear Graph', 'Reset the Graph Panel')
@@ -87,9 +92,12 @@ class MainFrame(wx.Frame):
         #Menu Bindings Go here
         self.Bind(wx.EVT_MENU, self.OnLoad, id=100)
         self.Bind(wx.EVT_MENU, self.OnSave, id=101)
+        self.Bind(wx.EVT_MENU, self.OnSaveAs, id=108)
         self.Bind(wx.EVT_MENU, self.OnAbout, id=103)
         self.Bind(wx.EVT_MENU, self.OnSerial, id=104)
         self.Bind(wx.EVT_MENU, self.OnLog, id=105)
+        self.Bind(wx.EVT_MENU, self.OnStop, id=106)
+        self.Bind(wx.EVT_MENU, self.OnClear, id=107)
         ################################################### 
         
         """
@@ -228,16 +236,25 @@ class MainFrame(wx.Frame):
                 s.close()
             except serial.SerialException:
                 self.SetStatusText("Problem with the serial ports")
+                
+    def OnClear(self,event):
+        self.SetStatusText("Clearing the current graph...")
+        self.date = []
+        self.kiln_temp = []
+        self.draw_graph()
+    
+    def OnStop(self,event):
+        self.SetStatusText("Now stops the logging...")
+        self.SensorTimer.Stop()
 
     def OnLog(self, event):
         self.SetStatusText("Now starts the logging...")
         #Startup the Timer for Sensor Readings
-        self.SensorTimer = wx.Timer(self)
-        self.Bind(wx.EVT_TIMER,self.OnTick,self.SensorTimer)
         self.SensorTimer.Start(3000)
    
  
     def OnAbout(self, event):
+        self.SetStatusText("All about ...PyroLogger...")
         dlg = wx.MessageDialog(self, 'When you as the Pyro want to Log!  Revision .0000001 March 12, 2008', 'About Pyrologger', wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
@@ -278,16 +295,50 @@ class MainFrame(wx.Frame):
                 file.write ("\n")
                 list_count = list_count + 1
             file.close
-            self.SetStatusText("Saved current Graph")
+            self.SetStatusText("Saved current Graph...")
+        except IOError:
+            self.SetStatusText("Error writing to file!")
+            
+    def OnSaveAs(self,EVENT):
+        
+        dialog = wx.FileDialog(self,"Save Graph Data...","","","Graph File (*.txt)|*.txt",wx.SAVE)
+        if (dialog.ShowModal() == wx.ID_CANCEL):
+            return  # canceled, bail
+        # ok they saved
+        self.filename = dialog.GetPath();
+        self.SetTitle("PyroLogger        "+self.filename)
+
+        try:
+            file = open(self.filename, 'w')
+            list_count = 0
+            file.write ("Log Date and Time ")
+            file.write (strftime("%a, %d %b %Y %H:%M:%S"))
+            file.write ("\n")
+            file.write ("Ambient Kiln Date Date2Num")
+            file.write ("\n")
+            file.write ("\n")
+            for reading in self.date:
+                value_1 = "%.2f" % self.ambient_temp[list_count]
+                value_2 = "%.2f" % self.kiln_temp[list_count]
+                value_3 = self.date_human[list_count]
+                value_4 = "%.11f" % self.date[list_count]
+                value = (list_count,value_1,value_2,value_3,value_4)
+                file_line = str(value)
+                file.write (file_line)
+                file.write ("\n")
+                list_count = list_count + 1
+            file.close
+            self.SetStatusText("Saved current Graph...")
         except IOError:
             self.SetStatusText("Error writing to file!")
     
     
     def OnLoad(self,EVENT):
+        self.SetStatusText("Loading Graph...")
         self.SensorTimer.Stop()
         self.filename = None
             
-        dlg = wx.FileDialog(self, "Choose a file", os.getcwd(), "", "*.*", wx.OPEN)
+        dialog = wx.FileDialog(self, "Choose a file", os.getcwd(), "", "*.*", wx.OPEN)
         if (dialog.ShowModal() == wx.ID_CANCEL):
             return  # canceled, bail
         # ok they loaded
@@ -295,34 +346,31 @@ class MainFrame(wx.Frame):
         self.SetTitle("PyroLogger        "+self.filename)
         print "You Pressed Load"
         print "Slurping Raw Data... ummmmmm!!!"
-        file = open('log.txt', 'r')
-        for line in f.readlines():
-            #Split line up into its individual fields
-            fields = line.rsplit('\', \'')
-    
-            #Read in the Front and Back Thermocouple Values and do stats
-            thermo_front.append(fields[1])
-            if float(fields[1]) > high_front:
-                high_front = float(fields[1])
-                thermo_back.append(fields[3])  
-            if float(fields[3]) > high_back:
-                high_back = float(fields[3])
+        file = open(self.filename, 'r')
+        skip = 0
+        self.date = []
+        self.kiln_temp = []
         
-
-        #Further Split up the last field and read in the Date Code
-        paren = line.rfind(')')
-        date.append(line[paren-19:paren-1])
-
-        #Change all the Data to Floats
-        date_float = map(float, date)
-        thermo_front_float = map(float, thermo_front)
-        thermo_back_float = map(float, thermo_back)
-
+        for line in file.readlines():
+            if (skip >= 3):
+                #Split line up into its individual fields
+                #fields = line.rsplit('\', \'')
+                fields = line.split ('\', \'')
+                self.kiln_temp.append(fields[1])
+                paren = line.rfind(')')
+                self.date.append(line[paren-19:paren-1])
+            skip = skip + 1
+        
+        self.date = map(float, self.date)
+        self.kiln_temp = map(float, self.kiln_temp)
+        self.draw_graph()
+        
+        """
         #Print some Stats
         print "High Temperature for Front Thermocouple ==>",high_front
         print "High Temperature for Back Thermocouple ==>",high_back
         print "Number of Data Points Collected ==========>",len(date_float)
-
+        """
    
   
         
