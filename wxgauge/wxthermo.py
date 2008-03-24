@@ -208,24 +208,18 @@ class MainFrame(wx.Frame):
         self.subplot.clear()
         self.subplot = self.figure.add_subplot(111)
         #self.subplot.set_title(r"Kiln Temperature")
-
         #self.subplot.xaxis.set_major_locator( DayLocator() )
         #self.subplot.xaxis.set_minor_locator( HourLocator(12))
         #self.subplot.xaxis.set_major_locator( HourLocator(1))
         #self.subplot.xaxis.set_major_locator( MinuteLocator(30))
-        
-        self.subplot.xaxis.set_major_locator( HourLocator(1))
+        #self.subplot.xaxis.set_major_locator( HourLocator(1))
         
         #Turn off Scientific Notation on Y Axis
         self.subplot.yaxis.set_major_formatter(ScalarFormatter(False))
-         
         self.subplot.xaxis.set_major_formatter(DateFormatter('%H:%M'))
-        
+        self.figure.autofmt_xdate()
         self.subplot.grid(True)
         self.subplot.plot_date(self.date, self.kiln_temp, 'r-', linewidth = 1)
-        
-        #self.figure.autofmt_xdate()
-        
         self.canvas.draw()
     
     def OnSerial(self, event):    
