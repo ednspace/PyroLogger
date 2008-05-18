@@ -24,10 +24,12 @@ class MainFrame(wx.Frame):
         wx.Frame.__init__(self, parent, id, title, size = (1000,425))
         self.SetBackgroundColour('BLACK')
         self.Center()
+        self.debug = 'FALSE'
         
         #Unique Sensor IDs
         self.id1 = '30ED284B1000008F'
         self.id2 = '3063294B100000BB'
+        self.current_sensor = self.id2
         #Starting Temperatures for the gauges
         self.ambient_F = 70
         self.kiln_F = 1000
@@ -64,29 +66,32 @@ class MainFrame(wx.Frame):
 
         #Menu Items
         ################################################
-        menubar = wx.MenuBar()
-        file = wx.Menu()
-        config = wx.Menu()
-        help = wx.Menu()
+        self.menubar = wx.MenuBar()
+        self.FileMenu = wx.Menu()
+        self.ConfigMenu = wx.Menu()
+        self.HelpMenu = wx.Menu()
         
-        file.Append(100, '&Load', 'Load a saved Graph')
-        file.Append(101, '&Save', 'Save the current Graph')
-        file.Append(108, '&Save As...', 'Save the current Graph')
-        file.Append(105, '&Start Logging', 'Start logging process')
-        file.Append(106, '&Stop Logging', 'Stop logging process')
-        file.Append(107, '&Clear Graph', 'Reset the Graph Panel')
-        file.AppendSeparator()
-        file.Append(102, '&Quit', 'Quit')
+        self.FileMenu.Append(100, '&Load', 'Load a saved Graph')
+        self.FileMenu.Append(101, '&Save', 'Save the current Graph')
+        self.FileMenu.Append(108, '&Save As...', 'Save the current Graph')
+        self.FileMenu.Append(105, '&Start Logging', 'Start logging process')
+        self.FileMenu.Append(106, '&Stop Logging', 'Stop logging process')
+        self.FileMenu.Append(107, '&Clear Graph', 'Reset the Graph Panel')
+        self.FileMenu.AppendSeparator()
+        self.FileMenu.Append(102, '&Quit', 'Quit')
         
-        config.Append(104, '&Serial Port', 'Serial Port')
+        self.ConfigMenu.Append(104, '&Serial Port', 'Serial Port')
+        self.ConfigMenu.AppendSeparator()
+        self.ConfigMenu.AppendCheckItem(110,'&AutoSave','Toggle AutoSave')
+        self.ConfigMenu.AppendCheckItem(120,'&Debug','Toggle Debug')
         
         
-        help.Append(103,'&About', 'About')
+        self.HelpMenu.Append(103,'&About', 'About')
         
-        menubar.Append(file, '&File')
-        menubar.Append(config, '&Config')
-        menubar.Append(help, '&Help')
-        self.SetMenuBar(menubar)
+        self.menubar.Append(self.FileMenu, '&File')
+        self.menubar.Append(self.ConfigMenu, '&Config')
+        self.menubar.Append(self.HelpMenu, '&Help')
+        self.SetMenuBar(self.menubar)
         self.CreateStatusBar()
         
         #Menu Bindings Go here
@@ -98,6 +103,8 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnLog, id=105)
         self.Bind(wx.EVT_MENU, self.OnStop, id=106)
         self.Bind(wx.EVT_MENU, self.OnClear, id=107)
+        self.Bind(wx.EVT_MENU, self.OnAutoSave, id=110)
+        self.Bind(wx.EVT_MENU, self.OnDebug, id=120)
         ################################################### 
         
         """
@@ -129,7 +136,7 @@ class MainFrame(wx.Frame):
         self.kiln.OnPaint()
         
         #Get Celcius From First Thermo
-        self.celsius = get_celsius(self.id1)
+        self.celsius = get_celsius(self.current_sensor)
         self.celsius_reverse = reverse_poly(self.celsius)
         self.ambient_F=(((self.celsius*9.0)/5.0)+32)
         time.sleep(1)
@@ -137,7 +144,7 @@ class MainFrame(wx.Frame):
         #    time.sleep(.1)
         
         #Get uV from first Thermo
-        self.uv = get_uv(self.id1)
+        self.uv = get_uv(self.current_sensor)
         self.uv = self.uv + self.celsius_reverse
         self.temp_uv = convert_uv(self.uv)
         self.kiln_F = (((self.temp_uv*9.0)/5.0)+32)
@@ -166,8 +173,9 @@ class MainFrame(wx.Frame):
         
         #Update the thermometer displays
         self.ambient.update_gauge(self.ambient_F)
-        #self.kiln.update_gauge(self.kiln_F)
-        self.kiln.update_gauge(1700)         
+        if (self.kiln_F > 500):
+            self.kiln.update_gauge(self.kiln_F)
+            #self.kiln.update_gauge(1700)         
     
         #Update the Lists and Graph
         self.kiln_temp.append(self.kiln_F)
@@ -184,6 +192,10 @@ class MainFrame(wx.Frame):
         if (self.sample_count >= self.sample_max):
             self.draw_graph()
             self.sample_count = 0
+        if (self.count%100 == 0) & (self.AutoSave == 'True'):
+            if (self.debug == 'True'):
+                print "I gots 100 samples, now ehm gonna save em"
+            self.OnSave(None)
         
         
     
@@ -195,15 +207,18 @@ class MainFrame(wx.Frame):
         
         self.figure = Figure((11,4) , 75)
         #pnl = wx.Panel(self, -1)
-        #self.canvas = FigureCanvasWx(pnl, -1, self.figure)
         self.canvas = FigureCanvasWx(self, -1, self.figure)
         self.canvas.CenterOnParent()
         self.toolbar = Toolbar(self.canvas)
         self.toolbar.Realize()
+        
         self.subplot = self.figure.add_subplot(111)
+        self.subplot.set_title(r"Kiln Temperature")
+        
         
     def draw_graph(self):
-        print "updating the graph ;)"
+        if (self.debug == 'True'):
+            print "updating the graph ;)"
         
         self.subplot.clear()
         self.subplot = self.figure.add_subplot(111)
@@ -221,6 +236,28 @@ class MainFrame(wx.Frame):
         self.subplot.grid(True)
         self.subplot.plot_date(self.date, self.kiln_temp, 'r-', linewidth = 1)
         self.canvas.draw()
+    
+    ##########################################################################
+    ####################MENU Function Start Here##############################
+    ##########################################################################
+    def OnDebug(self, event):
+        if (self.ConfigMenu.IsChecked(120)):
+            self.debug = 'True'
+            self.SetStatusText("Turning on Debug")
+        else:
+            self.debug = 'False'
+            self.SetStatusText("Turning Off Debug")
+                
+    def OnAutoSave(self, event):
+        if (self.debug == 'True'):
+            print "Somebody clicked on Autosave"
+            print self.ConfigMenu.IsChecked(110);
+        if (self.ConfigMenu.IsChecked(110)):
+            self.AutoSave = 'True'
+            self.SetStatusText("Auto Save is on... Saving every 100 samples")
+        else:
+            self.AutoSave = 'False'
+            self.SetStatusText("Auto Save is now off")
     
     def OnSerial(self, event):    
         for i in range(256):

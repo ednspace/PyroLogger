@@ -1,0 +1,7 @@
+Notes
+May 13, 2008
+Test of current draw with laptop B130 Dell
+KillAWatt reports 30 watts .56 amps 119 volts
+If we have a 90 amp hour battery. 30/12=2.5 (figure 3 amps for safety)
+90 amp hour battery should give 90/3=30 hours of life for logging 1 full day
+More time if screen is off.
