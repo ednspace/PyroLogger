@@ -3,7 +3,7 @@
 import wx,os,sys,math,time,matplotlib
 matplotlib.interactive(False)
 #Use the WxAgg back end. The Wx one takes too long to render
-matplotlib.use('WXAGG')
+matplotlib.use('WXAgg')
 from matplotlib.backends.backend_wxagg import Toolbar,FigureCanvasWx,FigureManager
 from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter 
@@ -17,13 +17,46 @@ from datetime import datetime
 from time import gmtime, strftime
 from thermo_functions import *
 
+class GaugeFrame(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title,(1000,0),(205,380))
+        #Instantiate the Two Thermometers One for the Kiln One for ambient
+        self.ambient=Thermometer('amb_F',0,5,os.path.join("images",'ambient_F.png'),self)
+        self.kiln=Thermometer('kiln_F_H',100,5,os.path.join("images",'kiln_FH.png'),self)
+        
+        #Bind the screen redraws to the PaintAll method in the Thermometer Class
+        self.Bind(wx.EVT_PAINT, self.PaintAll)
+        self.ambient.OnPaint()
+        self.kiln.OnPaint()
+        
+    def PaintAll(self, event):
+        self.ambient.OnPaint()
+        self.kiln.OnPaint()
+        self.ambient.update_gauge(self.ambient_F)
+        #self.kiln.update_gauge(self.kiln_F) 
+        self.kiln.update_gauge(1200)
 
 
 class MainFrame(wx.Frame):
     def __init__(self, parent, id, title):
-        wx.Frame.__init__(self, parent, id, title, size = (1000,425))
-        self.SetBackgroundColour('BLACK')
-        self.Center()
+        wx.Frame.__init__(self, parent, id, title,(0,0),(1000,400))
+        self.fig = Figure((12,5),75)
+        self.canvas = FigureCanvasWx(self,-1,self.fig)
+        self.canvas.CenterOnParent()
+        #Now put it all into a sizer
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.canvas, 1, wx.LEFT|wx.TOP|wx.GROW)
+        self.SetSizer(self.sizer)
+        self.Fit()
+        
+        
+        
+        
+        
+        
+        
+        
+        
         self.debug = 'FALSE'
         
         #Unique Sensor IDs
@@ -51,12 +84,7 @@ class MainFrame(wx.Frame):
         #Setup the Plotting Figure and Canvas Load Blank Graph
         self.load_graph()
 
-        #Instantiate the Two Thermometers One for the Kiln One for ambient
-        self.ambient=Thermometer('amb_F',0,5,os.path.join("images",'ambient_F.png'),self)
-        self.kiln=Thermometer('kiln_F_H',880,5,os.path.join("images",'kiln_FH.png'),self)
         
-        #Bind the screen redraws to the PaintAll method in the Thermometer Class
-        self.Bind(wx.EVT_PAINT, self.PaintAll)
         
         #Setup the Clock
         self.SensorTimer = wx.Timer(self)
@@ -205,26 +233,27 @@ class MainFrame(wx.Frame):
         #self.subplot is this Axes instance, as I had guessed.  
         #So, you can apply any Axes method to it.
         
-        self.figure = Figure((11,4) , 75)
+        #self.figure = Figure((11,4) , 75)
         #pnl = wx.Panel(self, -1)
-        self.canvas = FigureCanvasWx(self, -1, self.figure)
-        self.canvas.CenterOnParent()
-        self.toolbar = Toolbar(self.canvas)
-        self.toolbar.Realize()
+        #self.canvas = FigureCanvasWx(self, -1, self.figure)
+        #self.canvas.CenterOnParent()
+        #self.toolbar = Toolbar(self.canvas)
+        #self.toolbar.Realize()
         
-        self.subplot = self.figure.add_subplot(111)
+        self.subplot = self.fig.add_subplot(111)
         self.subplot.set_title(r"Kiln Temperature")
-        
+        #self.ambient.OnPaint()
+        #self.kiln.OnPaint()
         
     def draw_graph(self):
         if (self.debug == 'True'):
             print "updating the graph ;)"
         
         self.subplot.clear()
-        self.subplot = self.figure.add_subplot(111)
+        self.subplot = self.fig.add_subplot(111)
         #self.subplot.set_title(r"Kiln Temperature")
         #self.subplot.xaxis.set_major_locator( DayLocator() )
-        #self.subplot.xaxis.set_minor_locator( HourLocator(12))
+        self.subplot.xaxis.set_minor_locator( HourLocator(12))
         #self.subplot.xaxis.set_major_locator( HourLocator(1))
         #self.subplot.xaxis.set_major_locator( MinuteLocator(30))
         #self.subplot.xaxis.set_major_locator( HourLocator(1))
@@ -232,9 +261,9 @@ class MainFrame(wx.Frame):
         #Turn off Scientific Notation on Y Axis
         self.subplot.yaxis.set_major_formatter(ScalarFormatter(False))
         self.subplot.xaxis.set_major_formatter(DateFormatter('%H:%M'))
-        self.figure.autofmt_xdate()
+        #self.fig.autofmt_xdate()
         self.subplot.grid(True)
-        self.subplot.plot_date(self.date, self.kiln_temp, 'r-', linewidth = 1)
+        self.subplot.plot(self.date, self.kiln_temp, 'r-', linewidth = 1)
         self.canvas.draw()
     
     ##########################################################################
@@ -280,6 +309,8 @@ class MainFrame(wx.Frame):
 
     def OnLog(self, event):
         self.SetStatusText("Now starts the logging...")
+        #Open the serial port connection
+        ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
         #Startup the Timer for Sensor Readings
         self.SensorTimer.Start(3000)
    
@@ -290,12 +321,7 @@ class MainFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
                    
-    def PaintAll(self, event):
-        self.ambient.OnPaint()
-        self.kiln.OnPaint()
-        self.ambient.update_gauge(self.ambient_F)
-        #self.kiln.update_gauge(self.kiln_F) 
-        self.kiln.update_gauge(1200)
+    
     
     def OnSave(self,EVENT):
         if (self.filename == None):
@@ -418,6 +444,7 @@ class Thermometer:
         self.dc = wx.PaintDC(self.frame)
         self.dc.DrawBitmap(self.gauge, self.x, self.y)
         
+        
     def update_gauge(self,temp):
         temp = round(temp,2)
         if(self.scale == 'amb_F'):  #Ambient Farenheit Scale            
@@ -433,10 +460,13 @@ class Thermometer:
         
 class MyApp(wx.App):
     def OnInit(self):
-        frame = MainFrame(None, -1, 'PyroLogger')
+        frame = MainFrame(None,-1,'PyroLogger')
         frame.Show(True)
         self.SetTopWindow(frame)
+        frame2 = GaugeFrame(None,-1,'Gauges')
+        frame2.Show(True)
+        
         return True
-
+        
 app = MyApp(0)
 app.MainLoop()
