@@ -17,37 +17,59 @@ from datetime import datetime
 from time import gmtime, strftime
 from thermo_functions import *
 
-class GaugeFrame(wx.Frame):
-    def __init__(self, parent, id, title):
-        wx.Frame.__init__(self, parent, id, title,(1000,0),(205,380))
-        #Instantiate the Two Thermometers One for the Kiln One for ambient
-        self.ambient=Thermometer('amb_F',0,5,os.path.join("images",'ambient_F.png'),self)
-        self.kiln=Thermometer('kiln_F_H',100,5,os.path.join("images",'kiln_FH.png'),self)
-        
-        #Bind the screen redraws to the PaintAll method in the Thermometer Class
-        self.Bind(wx.EVT_PAINT, self.PaintAll)
-        self.ambient.OnPaint()
-        self.kiln.OnPaint()
-        
-    def PaintAll(self, event):
-        self.ambient.OnPaint()
-        self.kiln.OnPaint()
-        self.ambient.update_gauge(self.ambient_F)
-        #self.kiln.update_gauge(self.kiln_F) 
-        self.kiln.update_gauge(1200)
-
-
 class MainFrame(wx.Frame):
     def __init__(self, parent, id, title):
-        wx.Frame.__init__(self, parent, id, title,(0,0),(1000,400))
-        self.fig = Figure((12,5),75)
-        self.canvas = FigureCanvasWx(self,-1,self.fig)
-        self.canvas.CenterOnParent()
-        #Now put it all into a sizer
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.canvas, 1, wx.LEFT|wx.TOP|wx.GROW)
-        self.SetSizer(self.sizer)
-        self.Fit()
+        wx.Frame.__init__(self, parent, id, title,(0,0),(975,500))
+        
+        
+        
+        TopPanel = wx.Panel(self, -1)
+        gauge1 = wx.Panel(TopPanel,-1)
+        gauge2 = wx.Panel(TopPanel,-1)
+        graph1 = wx.Panel(TopPanel,-1)
+        
+        #Set Panel Background Colors
+        graph1.SetBackgroundColour("black")
+        gauge1.SetBackgroundColour("black")
+        gauge2.SetBackgroundColour("black")
+        TopPanel.SetBackgroundColour("black")
+        
+        
+        
+        
+        #Instantiate the Two Thermometers One for the Kiln One for ambient
+        self.ambient=Thermometer(gauge1,-1,'amb_F',0,0,os.path.join("images",'ambient_F.png'))
+        self.kiln=Thermometer(gauge2,-1,'kiln_F_H',0,0,os.path.join("images",'kiln_FH.png'))
+        
+        self.ambient.update_gauge(17)
+        self.kiln.update_gauge(450)
+        
+        #Set up the Graph Panel
+        self.fig = Figure((10,5),75)
+        self.canvas = FigureCanvasWx(graph1,-1,self.fig)
+       
+        
+        
+        #Create the sizer
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.Add(gauge1,0,wx.ALIGN_CENTER_HORIZONTAL | wx.TOP , 30)
+        hbox.Add(graph1,0,wx.ALIGN_CENTER_HORIZONTAL | wx.TOP , 20)
+        hbox.Add(gauge2,0,wx.ALIGN_CENTER_HORIZONTAL | wx.TOP , 30)
+        TopPanel.SetSizer(hbox)
+        
+        
+       
+       
+        #Create Output Boxes
+        #Displays Highest Recorded Reading
+        self.HighReadingLabel = wx.StaticText(TopPanel, -1,'High Reading',(25,400))
+        self.HighReadingLabel.SetForegroundColour('white')
+        self.HighReading = wx.TextCtrl(TopPanel, -1,"",(25,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        #Displays Current Sample Number
+        self.SampleNumLabel = wx.StaticText(TopPanel, -1,'Sample#',(125,400))
+        self.SampleNumLabel.SetForegroundColour('white')
+        self.SampleNum = wx.TextCtrl(TopPanel, -1,"",(125,415),style=wx.TE_READONLY|wx.TE_CENTER)
         
         
         
@@ -55,10 +77,14 @@ class MainFrame(wx.Frame):
         
         
         
+        
+        
+        
+        self.Centre()
+        self.Show(True)
         
         
         self.debug = 'FALSE'
-        
         #Unique Sensor IDs
         self.id1 = '30ED284B1000008F'
         self.id2 = '3063294B100000BB'
@@ -74,6 +100,13 @@ class MainFrame(wx.Frame):
         self.count = 0
         self.sample_count = 0
         self.x = []
+        
+        
+        
+        
+        
+        
+        
         
         #Make Sure Filename is cleared
         self.filename = None
@@ -233,17 +266,10 @@ class MainFrame(wx.Frame):
         #self.subplot is this Axes instance, as I had guessed.  
         #So, you can apply any Axes method to it.
         
-        #self.figure = Figure((11,4) , 75)
-        #pnl = wx.Panel(self, -1)
-        #self.canvas = FigureCanvasWx(self, -1, self.figure)
-        #self.canvas.CenterOnParent()
-        #self.toolbar = Toolbar(self.canvas)
-        #self.toolbar.Realize()
         
         self.subplot = self.fig.add_subplot(111)
         self.subplot.set_title(r"Kiln Temperature")
-        #self.ambient.OnPaint()
-        #self.kiln.OnPaint()
+        
         
     def draw_graph(self):
         if (self.debug == 'True'):
@@ -261,7 +287,7 @@ class MainFrame(wx.Frame):
         #Turn off Scientific Notation on Y Axis
         self.subplot.yaxis.set_major_formatter(ScalarFormatter(False))
         self.subplot.xaxis.set_major_formatter(DateFormatter('%H:%M'))
-        #self.fig.autofmt_xdate()
+        self.fig.autofmt_xdate()
         self.subplot.grid(True)
         self.subplot.plot(self.date, self.kiln_temp, 'r-', linewidth = 1)
         self.canvas.draw()
@@ -301,6 +327,8 @@ class MainFrame(wx.Frame):
         self.SetStatusText("Clearing the current graph...")
         self.date = []
         self.kiln_temp = []
+        self.HighReading.Clear()
+        self.SampleNum.Clear()
         self.draw_graph()
     
     def OnStop(self,event):
@@ -411,7 +439,6 @@ class MainFrame(wx.Frame):
         for line in file.readlines():
             if (skip >= 3):
                 #Split line up into its individual fields
-                #fields = line.rsplit('\', \'')
                 fields = line.split ('\', \'')
                 self.kiln_temp.append(fields[1])
                 paren = line.rfind(')')
@@ -420,33 +447,54 @@ class MainFrame(wx.Frame):
         
         self.date = map(float, self.date)
         self.kiln_temp = map(float, self.kiln_temp)
+        
+        high = 0
+        for reading in self.kiln_temp:
+            if (reading > high):
+                high = reading
+                
+        self.HighReading.Clear()
+        self.HighReading.AppendText(str(high))
+        
+        self.SampleNum.Clear()
+        self.SampleNum.AppendText(str(len(self.kiln_temp)))
+        
+        
+        
         self.draw_graph()
         
-        """
-        #Print some Stats
-        print "High Temperature for Front Thermocouple ==>",high_front
-        print "High Temperature for Back Thermocouple ==>",high_back
-        print "Number of Data Points Collected ==========>",len(date_float)
-        """
+        
    
   
         
-class Thermometer:
-    def __init__ (self,scale,x,y,filename,frame):      
+class Thermometer(wx.Panel):
+    
+    def __init__ (self,parent,id,scale,x,y,filename):
+        wx.Panel.__init__(self, parent, id,size=(104,362) )    
         self.scale=scale
         self.filename=filename
         self.x=x
         self.y=y
         self.gauge=wx.Bitmap(self.filename)
-        self.frame = frame
         
-    def OnPaint(self):
-        self.dc = wx.PaintDC(self.frame)
-        self.dc.DrawBitmap(self.gauge, self.x, self.y)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.dc = wx.PaintDC(self)
+        self.SaveTemp = 0
         
+    def OnPaint(self,event):
+        self.dc = wx.PaintDC(self)
+        self.dc.DrawBitmap(self.gauge,0,0)
+        self.update_gauge(self.SaveTemp)
+        #self.dc.DrawBitmap(self.gauge, self.x, self.y)
         
+    
+    
+       
     def update_gauge(self,temp):
         temp = round(temp,2)
+        if (temp <> self.SaveTemp):
+            self.SaveTemp = temp
+            
         if(self.scale == 'amb_F'):  #Ambient Farenheit Scale            
             self.length = (338 + self.y) - ((temp * 3.2) - 48)
             self.dc.SetPen(wx.Pen('red', 4))
@@ -457,15 +505,13 @@ class Thermometer:
             self.dc.SetPen(wx.Pen('red', 4))
             self.dc.DrawLine(self.x+58, (330+self.y), self.x+58, self.length)
         return
+   
         
 class MyApp(wx.App):
     def OnInit(self):
         frame = MainFrame(None,-1,'PyroLogger')
         frame.Show(True)
         self.SetTopWindow(frame)
-        frame2 = GaugeFrame(None,-1,'Gauges')
-        frame2.Show(True)
-        
         return True
         
 app = MyApp(0)

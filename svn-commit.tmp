@@ -1,0 +1,10 @@
+
+--This line, and those below, will be ignored--
+
+M    wxgauge/wxthermo.py
+M    wxgauge/graphs/graph1.txt
+A    wxgauge/graphs/body_temp.txt
+M    wxgauge/graphs/graph2.txt
+A    wxgauge/graphs/monitor_voltage.txt
+A    wxgauge/graphs/heat_gun.txt
+A    wxgauge/serial_probe.py
