@@ -88,7 +88,7 @@ class MainFrame(wx.Frame):
         #Unique Sensor IDs
         self.id1 = '30ED284B1000008F'
         self.id2 = '3063294B100000BB'
-        self.current_sensor = self.id2
+        self.current_sensor = self.id1
         #Starting Temperatures for the gauges
         self.ambient_F = 70
         self.kiln_F = 1000
@@ -193,8 +193,8 @@ class MainFrame(wx.Frame):
      
     def OnTick(self,event):
         #Redraw the the thermometer backgrounds
-        self.ambient.OnPaint()
-        self.kiln.OnPaint()
+        self.ambient.OnPaint(self)
+        self.kiln.OnPaint(self)
         
         #Get Celcius From First Thermo
         self.celsius = get_celsius(self.current_sensor)

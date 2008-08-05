@@ -1,6 +1,6 @@
 import serial
 global ser 
-#ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
+ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
 #print ser
 #Function Definitions
 def get_faren(address):
