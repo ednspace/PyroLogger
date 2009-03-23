@@ -1,40 +1,44 @@
 import serial
-global ser 
-ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
+global ser
+
+try: 
+    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
+except:
+    print "Invalid Serial Port Selected"
 #print ser
 #Function Definitions
 def get_faren(address):
-	ser.flushInput()
-	ser.write("\r")
-	ser.write("F")
-	ser.write(address)
-	ser.write("\r")
-	#line = ser.read(5)
-	line = ser.readline()
-	ser.flushInput()
-	return line
+    ser.flushInput()
+    ser.write("\r")
+    ser.write("F")
+    ser.write(address)
+    ser.write("\r")
+    #line = ser.read(5)
+    line = ser.readline()
+    ser.flushInput()
+    return line
 
 def get_celsius(address):
-	ser.flushInput()
-	ser.write("\r")
-	ser.write("C")
-	ser.write(address)
-	ser.write("\r")
-	#line = ser.read(5)
-	line = ser.readline()
-	ser.flushInput()
-	return float(line)
+    ser.flushInput()
+    ser.write("\r")
+    ser.write("C")
+    ser.write(address)
+    ser.write("\r")
+    #line = ser.read(5)
+    line = ser.readline()
+    ser.flushInput()
+    return float(line)
 
 def get_uv(address):
-	ser.flushInput()
-	ser.write("\r")
-	ser.write("K")
-	ser.write(address)
-	ser.write("\r")
-	#line = ser.read(9)
-	line = ser.readline()
-	ser.flushInput()
-	return float(line)
+    ser.flushInput()
+    ser.write("\r")
+    ser.write("K")
+    ser.write(address)
+    ser.write("\r")
+    #line = ser.read(9)
+    line = ser.readline()
+    ser.flushInput()
+    return float(line)
 
 def reverse_poly(x):
     #Takes in Temp in deg C and gives back Uv's, used to adjust for ambiant temperature

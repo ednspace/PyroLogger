@@ -82,6 +82,7 @@ class MainFrame(wx.Frame):
         
         self.Centre()
         self.Show(True)
+        self.AutoSave = 'FALSE'
         
         
         self.debug = 'FALSE'
