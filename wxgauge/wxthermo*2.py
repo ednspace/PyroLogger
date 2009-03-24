@@ -224,7 +224,7 @@ class MainFrame(wx.Frame):
         if (self.kiln_front < self.ambient):
             self.kiln_front = self.ambient
             
-        
+        time.sleep(1)
         
         #Get Celcius From Back Thermo
         self.celsius = get_celsius(self.back_sensor)
@@ -234,7 +234,7 @@ class MainFrame(wx.Frame):
         #for i in range(1, 10):
         #    time.sleep(.1)
         
-        #Get uV from first Thermo
+        #Get uV from back Thermo
         self.uv = get_uv(self.back_sensor)
         self.uv = self.uv + self.celsius_reverse
         self.temp_uv = convert_uv(self.uv)
@@ -244,8 +244,7 @@ class MainFrame(wx.Frame):
         #If it is less set the thermo to the ambient
         if (self.kiln_back < self.ambient):
             self.kiln_back = self.ambient
-        
-        
+        time.sleep(1)
         
         """Rolling Average Filter Commented Out
         if len(kiln_temp) > 20:
@@ -327,6 +326,7 @@ class MainFrame(wx.Frame):
         self.fig.autofmt_xdate()
         self.subplot.grid(True)
         self.subplot.plot(self.date, self.kiln_front_array, 'r-', linewidth = 1)
+        self.subplot.plot(self.date, self.kiln_back_array, 'b-', linewidth = 1)
         self.canvas.draw()
     
     ##########################################################################
@@ -377,7 +377,7 @@ class MainFrame(wx.Frame):
         #Open the serial port connection
         ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
         #Startup the Timer for Sensor Readings
-        self.SensorTimer.Start(3000)
+        self.SensorTimer.Start(10000)
    
  
     def OnAbout(self, event):
