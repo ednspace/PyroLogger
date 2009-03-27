@@ -1,10 +1,10 @@
-import serial
+#import serial
 global ser
 
-try: 
-    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
-except:
-    print "Invalid Serial Port Selected"
+#try: 
+#    ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
+#except:
+#    print "Invalid Serial Port Selected"
 #print ser
 #Function Definitions
 def get_faren(address):
@@ -19,14 +19,14 @@ def get_faren(address):
     return line
 
 def get_celsius(address):
-    ser.flushInput()
-    ser.write("\r")
-    ser.write("C")
-    ser.write(address)
-    ser.write("\r")
+    self.ser.flushInput()
+    self.ser.write("\r")
+    self.ser.write("C")
+    self.ser.write(address)
+    self.ser.write("\r")
     #line = ser.read(5)
-    line = ser.readline()
-    ser.flushInput()
+    line = self.ser.readline()
+    self.ser.flushInput()
     return float(line)
 
 def get_uv(address):

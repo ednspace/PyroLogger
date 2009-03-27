@@ -1,11 +1,28 @@
 #!/usr/bin/python
 
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#       
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU General Public License for more details.
+#       
+#       You should have received a copy of the GNU General Public License
+#       along with this program; if not, write to the Free Software
+#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#       MA 02110-1301, USA.
+
+
 """
-Last Update 3-23-2009
+Last Update March 2009
 Program edited to allow for two thermocouples, one in the front, one in the back
+Pretty Major ReWrite, Bug Fixing, Feature Enhancement Etc...
 """
 
-import wx,os,sys,math,time,matplotlib
+import wx,os,sys,math,time,matplotlib,serial
 matplotlib.interactive(False)
 #Use the WxAgg back end. The Wx one takes too long to render
 matplotlib.use('WXAgg')
@@ -20,7 +37,9 @@ from matplotlib.ticker import Locator, FormatStrFormatter
 
 from datetime import datetime
 from time import gmtime, strftime
-from thermo_functions import *
+#from thermo_functions import *
+
+#global ser
 
 class MainFrame(wx.Frame):
     def __init__(self, parent, id, title):
@@ -68,15 +87,36 @@ class MainFrame(wx.Frame):
        
        
         #Create Output Boxes
-        #Displays Highest Recorded Reading
-        self.HighReadingLabel = wx.StaticText(TopPanel, -1,'High Reading',(25,400))
-        self.HighReadingLabel.SetForegroundColour('white')
-        self.HighReading = wx.TextCtrl(TopPanel, -1,"",(25,415),style=wx.TE_READONLY|wx.TE_CENTER)
-        
         #Displays Current Sample Number
-        self.SampleNumLabel = wx.StaticText(TopPanel, -1,'Sample#',(125,400))
+        self.SampleNumLabel = wx.StaticText(TopPanel, -1,'Reading',(25,400))
         self.SampleNumLabel.SetForegroundColour('white')
-        self.SampleNum = wx.TextCtrl(TopPanel, -1,"",(125,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        self.SampleNum = wx.TextCtrl(TopPanel, -1,"",(25,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.FrontReadingLabel = wx.StaticText(TopPanel, -1,'Front Temp',(125,400))
+        self.FrontReadingLabel.SetForegroundColour('white')
+        self.FrontReading = wx.TextCtrl(TopPanel, -1,"",(125,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.BackReadingLabel = wx.StaticText(TopPanel, -1,'Back Temp',(225,400))
+        self.BackReadingLabel.SetForegroundColour('white')
+        self.BackReading = wx.TextCtrl(TopPanel, -1,"",(225,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.FrontHighReadingLabel = wx.StaticText(TopPanel, -1,'Front High',(325,400))
+        self.FrontHighReadingLabel.SetForegroundColour('white')
+        self.FrontHighReading = wx.TextCtrl(TopPanel, -1,"",(325,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.BackHighReadingLabel = wx.StaticText(TopPanel, -1,'Back High',(425,400))
+        self.BackHighReadingLabel.SetForegroundColour('white')
+        self.BackHighReading = wx.TextCtrl(TopPanel, -1,"",(425,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.ElapsedReadingLabel = wx.StaticText(TopPanel, -1,'Elapsed Time',(525,400))
+        self.ElapsedReadingLabel.SetForegroundColour('white')
+        self.ElapsedReading = wx.TextCtrl(TopPanel, -1,"",(525,415),size=(200, 25),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        
+        
+
+        
+
 
         #Set Some Environment Variables
         self.Centre()
@@ -84,6 +124,9 @@ class MainFrame(wx.Frame):
         
         self.AutoSave = 'FALSE'
         self.debug = 'FALSE'
+        
+        self.FrontHigh = 0
+        self.BackHigh= 0
         
         #Unique Sensor IDs
         self.id1 = '30ED284B1000008F'
@@ -109,10 +152,6 @@ class MainFrame(wx.Frame):
         self.count = 0
         self.sample_count = 0
         self.x = []
-        
-      
-        
-        
         
         
         #Make Sure Filename is cleared
@@ -206,17 +245,17 @@ class MainFrame(wx.Frame):
        
         
         #Get Celcius From Front Thermo
-        self.celsius = get_celsius(self.front_sensor)
-        self.celsius_reverse = reverse_poly(self.celsius)
+        self.celsius = self.get_celsius(self.front_sensor)
+        self.celsius_reverse = self.reverse_poly(self.celsius)
         self.ambient =(((self.celsius*9.0)/5.0)+32)
         time.sleep(1)
         #for i in range(1, 10):
         #    time.sleep(.1)
         
         #Get uV from first Thermo
-        self.uv = get_uv(self.front_sensor)
+        self.uv = self.get_uv(self.front_sensor)
         self.uv = self.uv + self.celsius_reverse
-        self.temp_uv = convert_uv(self.uv)
+        self.temp_uv = self.convert_uv(self.uv)
         self.kiln_front = (((self.temp_uv*9.0)/5.0)+32)
         
         #Make sure thermo measurement is not less then ambient
@@ -227,17 +266,17 @@ class MainFrame(wx.Frame):
         time.sleep(1)
         
         #Get Celcius From Back Thermo
-        self.celsius = get_celsius(self.back_sensor)
-        self.celsius_reverse = reverse_poly(self.celsius)
+        self.celsius = self.get_celsius(self.back_sensor)
+        self.celsius_reverse = self.reverse_poly(self.celsius)
         self.ambient =(((self.celsius*9.0)/5.0)+32)
         time.sleep(1)
         #for i in range(1, 10):
         #    time.sleep(.1)
         
         #Get uV from back Thermo
-        self.uv = get_uv(self.back_sensor)
+        self.uv = self.get_uv(self.back_sensor)
         self.uv = self.uv + self.celsius_reverse
-        self.temp_uv = convert_uv(self.uv)
+        self.temp_uv = self.convert_uv(self.uv)
         self.kiln_back = (((self.temp_uv*9.0)/5.0)+32)
         
         #Make sure thermo measurement is not less then ambient
@@ -245,6 +284,36 @@ class MainFrame(wx.Frame):
         if (self.kiln_back < self.ambient):
             self.kiln_back = self.ambient
         time.sleep(1)
+        
+        
+        #Update the Front High Value Holder
+        if self.kiln_front > self.FrontHigh:
+            self.FrontHigh = self.kiln_front
+        self.FrontHigh = round(self.FrontHigh,1)
+        self.FrontHighReading.Clear()
+        self.FrontHighReading.AppendText(str(self.FrontHigh))
+        
+        #Update the Back High Value Holder
+        if self.kiln_back > self.BackHigh:
+            self.BackHigh = self.kiln_back
+        self.BackHigh = round(self.BackHigh,1)
+        self.BackHighReading.Clear()
+        self.BackHighReading.AppendText(str(self.BackHigh))
+        
+        self.BackReading.Clear()
+        self.BackReading.AppendText(str(round(self.kiln_back,1)))
+        
+        self.FrontReading.Clear()
+        self.FrontReading.AppendText(str(round(self.kiln_front,1)))
+        
+        self.elapsed = time.time()-self.t1
+        self.ElapsedReading.Clear()
+        self.ElapsedReading.AppendText(time.strftime("day %j - %H hrs. %M mins. %S secs.", time.gmtime(self.elapsed)))
+        
+        
+    
+        
+        
         
         """Rolling Average Filter Commented Out
         if len(kiln_temp) > 20:
@@ -280,7 +349,12 @@ class MainFrame(wx.Frame):
   
         self.x.append(self.count)
         self.count = self.count + 1
-        print "Ambient===>",self.ambient,"kiln front===>",self.kiln_front, "kiln back===>",self.kiln_back,"Samples==>",self.count
+        self.SampleNum.Clear()
+        self.SampleNum.AppendText(str(self.count))
+        
+        print "front=>", round(self.kiln_front,1), "     back=>", round(self.kiln_back,1), "     ambient=>", round(self.ambient,1), "     Samples==>",self.count
+        
+        #print "Ambient===>",self.ambient,"kiln front===>",self.kiln_front, "kiln back===>",self.kiln_back,"Samples==>",self.count
         
         self.sample_count = self.sample_count + 1
         if (self.sample_count >= self.sample_max):
@@ -363,9 +437,12 @@ class MainFrame(wx.Frame):
     def OnClear(self,event):
         self.SetStatusText("Clearing the current graph...")
         self.date = []
-        self.kiln_temp = []
+        self.kiln_front_array = []
+        self.kiln_back_array = []
+        """
         self.HighReading.Clear()
         self.SampleNum.Clear()
+        """
         self.draw_graph()
     
     def OnStop(self,event):
@@ -373,16 +450,18 @@ class MainFrame(wx.Frame):
         self.SensorTimer.Stop()
 
     def OnLog(self, event):
-        self.SetStatusText("Now starts the logging...")
         #Open the serial port connection
-        ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
-        #Startup the Timer for Sensor Readings
-        self.SensorTimer.Start(10000)
-   
- 
+        try: 
+            self.ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
+            self.SetStatusText("Now starts the logging...")
+            self.t1 = time.time()
+            self.SensorTimer.Start(10000)
+        except:
+            self.SetStatusText("Invalid Serial Port Selected")
+
     def OnAbout(self, event):
         self.SetStatusText("All about ...PyroLogger...")
-        dlg = wx.MessageDialog(self, 'When you as the Pyro want to Log!  Revision .0000001 March 12, 2008', 'About Pyrologger', wx.OK|wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(self, 'When you as the Pyro want to Log!  Last updated March 2009', 'About Pyrologger', wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
                    
@@ -403,15 +482,16 @@ class MainFrame(wx.Frame):
             file.write ("Log Date and Time ")
             file.write (strftime("%a, %d %b %Y %H:%M:%S"))
             file.write ("\n")
-            file.write ("Ambient Kiln Date Date2Num")
+            file.write ("Fields:Ambient KilnFront KilnBack Date Date2Num")
             file.write ("\n")
             file.write ("\n")
             for reading in self.date:
-                value_1 = "%.2f" % self.ambient_temp[list_count]
-                value_2 = "%.2f" % self.kiln_temp[list_count]
-                value_3 = self.date_human[list_count]
-                value_4 = "%.11f" % self.date[list_count]
-                value = (list_count,value_1,value_2,value_3,value_4)
+                value_1 = "%.1f" % self.ambient_array[list_count]
+                value_2 = "%.1f" % self.kiln_front_array[list_count]
+                value_3 = "%.1f" % self.kiln_back_array[list_count]
+                value_4 = self.date_human[list_count]
+                value_5 = "%.11f" % self.date[list_count]
+                value = (list_count,value_1,value_2,value_3,value_4,value_5)
                 file_line = str(value)
                 file.write (file_line)
                 file.write ("\n")
@@ -436,15 +516,16 @@ class MainFrame(wx.Frame):
             file.write ("Log Date and Time ")
             file.write (strftime("%a, %d %b %Y %H:%M:%S"))
             file.write ("\n")
-            file.write ("Ambient Kiln Date Date2Num")
+            file.write ("Fields:Ambient KilnFront KilnBack Date Date2Num")
             file.write ("\n")
             file.write ("\n")
             for reading in self.date:
-                value_1 = "%.2f" % self.ambient_temp[list_count]
-                value_2 = "%.2f" % self.kiln_temp[list_count]
-                value_3 = self.date_human[list_count]
-                value_4 = "%.11f" % self.date[list_count]
-                value = (list_count,value_1,value_2,value_3,value_4)
+                value_1 = "%.1f" % self.ambient_array[list_count]
+                value_2 = "%.1f" % self.kiln_front_array[list_count]
+                value_3 = "%.1f" % self.kiln_back_array[list_count]
+                value_4 = self.date_human[list_count]
+                value_5 = "%.11f" % self.date[list_count]
+                value = (list_count,value_1,value_2,value_3,value_4,value_5)
                 file_line = str(value)
                 file.write (file_line)
                 file.write ("\n")
@@ -471,20 +552,23 @@ class MainFrame(wx.Frame):
         file = open(self.filename, 'r')
         skip = 0
         self.date = []
-        self.kiln_temp = []
+        self.kiln_front_array = []
+        self.kiln_back_array = []
         
         for line in file.readlines():
             if (skip >= 3):
                 #Split line up into its individual fields
                 fields = line.split ('\', \'')
-                self.kiln_temp.append(fields[1])
+                self.kiln_front_array.append(fields[1])
+                self.kiln_back_array.append(fields[2])
                 paren = line.rfind(')')
                 self.date.append(line[paren-19:paren-1])
             skip = skip + 1
         
         self.date = map(float, self.date)
-        self.kiln_temp = map(float, self.kiln_temp)
-        
+        self.kiln_front_array = map(float, self.kiln_front_array)
+        self.kiln_back_array = map(float, self.kiln_back_array)
+        """
         high = 0
         for reading in self.kiln_temp:
             if (reading > high):
@@ -495,12 +579,80 @@ class MainFrame(wx.Frame):
         
         self.SampleNum.Clear()
         self.SampleNum.AppendText(str(len(self.kiln_temp)))
-        
+        """
         
         
         self.draw_graph()
         
-        
+    def get_faren(self,address):
+        ser.flushInput()
+        ser.write("\r")
+        ser.write("F")
+        ser.write(address)
+        ser.write("\r")
+        #line = ser.read(5)
+        line = ser.readline()
+        ser.flushInput()
+        return line
+
+    def get_celsius(self,address):
+        self.ser.flushInput()
+        self.ser.write("\r")
+        self.ser.write("C")
+        self.ser.write(address)
+        self.ser.write("\r")
+        #line = ser.read(5)
+        line = self.ser.readline()
+        self.ser.flushInput()
+        return float(line)
+
+    def get_uv(self,address):
+        self.ser.flushInput()
+        self.ser.write("\r")
+        self.ser.write("K")
+        self.ser.write(address)
+        self.ser.write("\r")
+        #line = ser.read(9)
+        line = self.ser.readline()
+        self.ser.flushInput()
+        return float(line)
+
+    def reverse_poly(self,x):
+        #Takes in Temp in deg C and gives back Uv's, used to adjust for ambiant temperature
+        coeffecients = [-1.76E1, 3.8921E1, 1.8559E-2, -9.9458E-5, 3.18409E-7, -5.607284E-10, 5.607506E-13, -3.20207E-16, 9.71511E-20, -1.21047E-23]
+
+        a0 = 1.18597600000E2
+        a1 = -0.118343200000E-3
+        a2 = 0.126968600000E3
+
+        e = 2.71828182
+
+        result2 = 0.0
+        added = 0.0
+        power = 0
+
+        exponent_value = x - a2
+        exponent_value = exponent_value * exponent_value
+        exponent_value = a1 * exponent_value
+        added = pow(e,exponent_value)
+        added = added * a0
+
+        for c in coeffecients:
+            result2 = (result2 + c * pow(x,power))
+            power = power + 1
+        result2 = result2 + added
+        result2 = result2 / 1000000
+        return (result2)
+
+    def convert_uv(self,uv):
+        coefficients = [0.226584602, 24152.10900, 67233.4248, 2210340.682, -860963914.9, 4.83506e10, -1.18452e12, 1.38690e13, -6.33708e13]
+        result1 = 0.0
+        power = 0
+        for c in coefficients:
+            result1 = result1 + c * pow(uv,power)
+            power = power + 1
+        result1 = round(result1,2)
+        return result1
    
   
         
