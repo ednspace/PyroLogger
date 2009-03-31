@@ -37,9 +37,6 @@ from matplotlib.ticker import Locator, FormatStrFormatter
 
 from datetime import datetime
 from time import gmtime, strftime
-#from thermo_functions import *
-
-#global ser
 
 class MainFrame(wx.Frame):
     def __init__(self, parent, id, title):
@@ -110,7 +107,7 @@ class MainFrame(wx.Frame):
         
         self.ElapsedReadingLabel = wx.StaticText(TopPanel, -1,'Elapsed Time',(525,400))
         self.ElapsedReadingLabel.SetForegroundColour('white')
-        self.ElapsedReading = wx.TextCtrl(TopPanel, -1,"",(525,415),size=(200, 25),style=wx.TE_READONLY|wx.TE_CENTER)
+        self.ElapsedReading = wx.TextCtrl(TopPanel, -1,"",(525,415),size=(300, 26),style=wx.TE_READONLY|wx.TE_CENTER)
         
         
         
@@ -336,7 +333,7 @@ class MainFrame(wx.Frame):
             self.thermo_front.update_gauge(self.kiln_front)
             
         if (self.kiln_back > 500):
-            self.thermo_front.update_gauge(self.kiln_back)
+            self.thermo_back.update_gauge(self.kiln_back)
         
     
         #Update the Lists and Graph
@@ -352,6 +349,23 @@ class MainFrame(wx.Frame):
         self.SampleNum.Clear()
         self.SampleNum.AppendText(str(self.count))
         
+        
+        """Attempts to just plot part of the line
+        Turn This code on if you want to only plot to a certain depth
+        self.depth is a variable that represents the number of readings to 
+        show on the graph at one time.  After this number is exceeded the graph scrolls"""
+        
+        self.depth = 100
+        if self.count > self.depth:
+            self.graph_front=self.kiln_front_array[(len(self.kiln_front_array)-self.depth):len(self.kiln_front_array)]
+            self.graph_back=self.kiln_back_array[(len(self.kiln_back_array)-self.depth):len(self.kiln_back_array)]
+            self.graph_date=self.date[(len(self.date)-self.depth):len(self.date)]
+        else:
+            self.rollover_front=self.kiln_front_array
+            self.rollover_back=self.kiln_back_array
+            self.rollover_date=self.date
+            
+            
         print "front=>", round(self.kiln_front,1), "     back=>", round(self.kiln_back,1), "     ambient=>", round(self.ambient,1), "     Samples==>",self.count
         
         #print "Ambient===>",self.ambient,"kiln front===>",self.kiln_front, "kiln back===>",self.kiln_back,"Samples==>",self.count
@@ -399,8 +413,12 @@ class MainFrame(wx.Frame):
         self.subplot.xaxis.set_major_formatter(DateFormatter('%H:%M'))
         self.fig.autofmt_xdate()
         self.subplot.grid(True)
-        self.subplot.plot(self.date, self.kiln_front_array, 'r-', linewidth = 1)
-        self.subplot.plot(self.date, self.kiln_back_array, 'b-', linewidth = 1)
+        
+        self.subplot.plot(self.graph_date, self.graph_front, 'r-', linewidth = 1)
+        self.subplot.plot(self.graph_date, self.graph_back, 'b-', linewidth = 1)
+        
+        #self.subplot.plot(self.date, self.kiln_front_array, 'r-', linewidth = 1)
+        #self.subplot.plot(self.date, self.kiln_back_array, 'b-', linewidth = 1)
         self.canvas.draw()
     
     ##########################################################################
@@ -435,14 +453,28 @@ class MainFrame(wx.Frame):
                 self.SetStatusText("Problem with the serial ports")
                 
     def OnClear(self,event):
+        """clear the lists"""
+        
         self.SetStatusText("Clearing the current graph...")
         self.date = []
         self.kiln_front_array = []
         self.kiln_back_array = []
-        """
-        self.HighReading.Clear()
+        
+        self.graph_front = self.kiln_front_array
+        self.graph_back = self.kiln_back_array
+        self.graph_date = self.date
+        
+        
+       
+        """clear the boxes"""
         self.SampleNum.Clear()
-        """
+        self.FrontReading.Clear()
+        self.BackReading.Clear()
+        self.FrontHighReading.Clear()
+        self.BackHighReading.Clear()
+        self.ElapsedReading.Clear()
+        
+        """Clear the graph Window"""
         self.draw_graph()
     
     def OnStop(self,event):
@@ -568,20 +600,11 @@ class MainFrame(wx.Frame):
         self.date = map(float, self.date)
         self.kiln_front_array = map(float, self.kiln_front_array)
         self.kiln_back_array = map(float, self.kiln_back_array)
-        """
-        high = 0
-        for reading in self.kiln_temp:
-            if (reading > high):
-                high = reading
-                
-        self.HighReading.Clear()
-        self.HighReading.AppendText(str(high))
         
-        self.SampleNum.Clear()
-        self.SampleNum.AppendText(str(len(self.kiln_temp)))
-        """
-        
-        
+        self.graph_front = self.kiln_front_array
+        self.graph_back = self.kiln_back_array
+        self.graph_date = self.date
+
         self.draw_graph()
         
     def get_faren(self,address):

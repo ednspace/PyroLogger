@@ -1,6 +1,6 @@
 #!/bin/sh
 
-python "wxthermo*2.py"
+python "wxthermo2.py"
 
 echo "
 
