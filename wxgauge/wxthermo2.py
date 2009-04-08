@@ -355,15 +355,15 @@ class MainFrame(wx.Frame):
         self.depth is a variable that represents the number of readings to 
         show on the graph at one time.  After this number is exceeded the graph scrolls"""
         
-        self.depth = 100
+        self.depth = 720
         if self.count > self.depth:
             self.graph_front=self.kiln_front_array[(len(self.kiln_front_array)-self.depth):len(self.kiln_front_array)]
             self.graph_back=self.kiln_back_array[(len(self.kiln_back_array)-self.depth):len(self.kiln_back_array)]
             self.graph_date=self.date[(len(self.date)-self.depth):len(self.date)]
         else:
-            self.rollover_front=self.kiln_front_array
-            self.rollover_back=self.kiln_back_array
-            self.rollover_date=self.date
+            self.graph_front=self.kiln_front_array
+            self.graph_back=self.kiln_back_array
+            self.graph_date=self.date
             
             
         print "front=>", round(self.kiln_front,1), "     back=>", round(self.kiln_back,1), "     ambient=>", round(self.ambient,1), "     Samples==>",self.count
@@ -487,7 +487,7 @@ class MainFrame(wx.Frame):
             self.ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
             self.SetStatusText("Now starts the logging...")
             self.t1 = time.time()
-            self.SensorTimer.Start(10000)
+            self.SensorTimer.Start(60000)
         except:
             self.SetStatusText("Invalid Serial Port Selected")
 
