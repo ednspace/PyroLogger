@@ -17,7 +17,7 @@
 
 
 """
-Last Update March 2009
+Last Update April 2009
 Program edited to allow for two thermocouples, one in the front, one in the back
 Pretty Major ReWrite, Bug Fixing, Feature Enhancement Etc...
 """
@@ -44,16 +44,16 @@ class MainFrame(wx.Frame):
         
         
         
-        TopPanel = wx.Panel(self, -1)
-        gauge1 = wx.Panel(TopPanel,-1)
-        gauge2 = wx.Panel(TopPanel,-1)
-        graph1 = wx.Panel(TopPanel,-1)
+        self.TopPanel = wx.Panel(self, -1)
+        gauge1 = wx.Panel(self.TopPanel,-1)
+        gauge2 = wx.Panel(self.TopPanel,-1)
+        graph1 = wx.Panel(self.TopPanel,-1)
         
         #Set Panel Background Colors
         graph1.SetBackgroundColour("black")
         gauge1.SetBackgroundColour("black")
         gauge2.SetBackgroundColour("black")
-        TopPanel.SetBackgroundColour("black")
+        self.TopPanel.SetBackgroundColour("black")
         
         
         
@@ -78,39 +78,10 @@ class MainFrame(wx.Frame):
         hbox.Add(gauge1,0,wx.ALIGN_CENTER_HORIZONTAL | wx.TOP , 30)
         hbox.Add(graph1,0,wx.ALIGN_CENTER_HORIZONTAL | wx.TOP , 20)
         hbox.Add(gauge2,0,wx.ALIGN_CENTER_HORIZONTAL | wx.TOP , 30)
-        TopPanel.SetSizer(hbox)
+        self.TopPanel.SetSizer(hbox)
         
         
-       
-       
-        #Create Output Boxes
-        #Displays Current Sample Number
-        self.SampleNumLabel = wx.StaticText(TopPanel, -1,'Reading',(25,400))
-        self.SampleNumLabel.SetForegroundColour('white')
-        self.SampleNum = wx.TextCtrl(TopPanel, -1,"",(25,415),style=wx.TE_READONLY|wx.TE_CENTER)
-        
-        self.FrontReadingLabel = wx.StaticText(TopPanel, -1,'Front Temp',(125,400))
-        self.FrontReadingLabel.SetForegroundColour('white')
-        self.FrontReading = wx.TextCtrl(TopPanel, -1,"",(125,415),style=wx.TE_READONLY|wx.TE_CENTER)
-        
-        self.BackReadingLabel = wx.StaticText(TopPanel, -1,'Back Temp',(225,400))
-        self.BackReadingLabel.SetForegroundColour('white')
-        self.BackReading = wx.TextCtrl(TopPanel, -1,"",(225,415),style=wx.TE_READONLY|wx.TE_CENTER)
-        
-        self.FrontHighReadingLabel = wx.StaticText(TopPanel, -1,'Front High',(325,400))
-        self.FrontHighReadingLabel.SetForegroundColour('white')
-        self.FrontHighReading = wx.TextCtrl(TopPanel, -1,"",(325,415),style=wx.TE_READONLY|wx.TE_CENTER)
-        
-        self.BackHighReadingLabel = wx.StaticText(TopPanel, -1,'Back High',(425,400))
-        self.BackHighReadingLabel.SetForegroundColour('white')
-        self.BackHighReading = wx.TextCtrl(TopPanel, -1,"",(425,415),style=wx.TE_READONLY|wx.TE_CENTER)
-        
-        self.ElapsedReadingLabel = wx.StaticText(TopPanel, -1,'Elapsed Time',(525,400))
-        self.ElapsedReadingLabel.SetForegroundColour('white')
-        self.ElapsedReading = wx.TextCtrl(TopPanel, -1,"",(525,415),size=(300, 26),style=wx.TE_READONLY|wx.TE_CENTER)
-        
-        
-        
+        self.OutputBoxes()   
 
         
 
@@ -173,6 +144,7 @@ class MainFrame(wx.Frame):
         self.menubar = wx.MenuBar()
         self.FileMenu = wx.Menu()
         self.ConfigMenu = wx.Menu()
+        self.SerialMenu = wx.Menu()
         self.HelpMenu = wx.Menu()
         
         self.FileMenu.Append(100, '&Load', 'Load a saved Graph')
@@ -184,10 +156,50 @@ class MainFrame(wx.Frame):
         self.FileMenu.AppendSeparator()
         self.FileMenu.Append(102, '&Quit', 'Quit')
         
-        self.ConfigMenu.Append(104, '&Serial Port', 'Serial Port')
-        self.ConfigMenu.AppendSeparator()
+    
+        #Build the Configuration Menu
+        # Build the Serial SubMenu
+        # Get list of files in /dev
+        cd = os.getcwd()
+        os.chdir("/dev")
+        dirdev = os.getcwd()
+        fileList = os.listdir(dirdev)
+
+        self.validPorts = list() 
+        validPortCount = 0
+
+        # Find the files that start with ttyUSB, USB connection
+        for file in fileList:
+          if file.startswith("ttyUSB"):
+            try:
+              sp = serial.Serial(file) 
+              validPortCount += 1
+              self.validPorts.append(sp.getPort()) 
+            except serial.SerialException:
+              pass
+
+        # Find the files that start with ttyS, 9 pin serial connection
+        for file in fileList:
+          if file.startswith("ttyS"):
+            try:
+              sp = serial.Serial(file) 
+              validPortCount += 1
+              self.validPorts.append(sp.getPort()) 
+            except serial.SerialException:
+              pass
+
+        
+        IdNumber=500
+        for port in self.validPorts:
+            self.SerialMenu.AppendRadioItem(IdNumber,port)
+            self.Bind(wx.EVT_MENU, self.OnSerial, id=IdNumber)
+            IdNumber = IdNumber + 1
+        
+        self.ConfigMenu.AppendMenu(104, "&Serial", self.SerialMenu)
         self.ConfigMenu.AppendCheckItem(110,'&AutoSave','Toggle AutoSave')
+        self.ConfigMenu.AppendSeparator()
         self.ConfigMenu.AppendCheckItem(120,'&Debug','Toggle Debug')
+            
         
         
         self.HelpMenu.Append(103,'&About', 'About')
@@ -198,9 +210,12 @@ class MainFrame(wx.Frame):
         self.SetMenuBar(self.menubar)
         self.CreateStatusBar()
         
+        
+        
         #Menu Bindings Go here
         self.Bind(wx.EVT_MENU, self.OnLoad, id=100)
         self.Bind(wx.EVT_MENU, self.OnSave, id=101)
+        self.Bind(wx.EVT_MENU, self.OnQuit, id=102)
         self.Bind(wx.EVT_MENU, self.OnSaveAs, id=108)
         self.Bind(wx.EVT_MENU, self.OnAbout, id=103)
         self.Bind(wx.EVT_MENU, self.OnSerial, id=104)
@@ -212,10 +227,6 @@ class MainFrame(wx.Frame):
         ################################################### 
         
         """Commented Out Buttons
-        #Button Items
-        ###############################################
-     
-
         self.save_bitmap = wx.Image(os.path.join("images",'save.png'), wx.BITMAP_TYPE_ANY).ConvertToBitmap()
         self.save_button = wx.BitmapButton(self, 200, bitmap=self.save_bitmap,pos=(250, 10), size = (self.save_bitmap.GetWidth(), self.save_bitmap.GetHeight()))
         
@@ -246,8 +257,7 @@ class MainFrame(wx.Frame):
         self.celsius_reverse = self.reverse_poly(self.celsius)
         self.ambient =(((self.celsius*9.0)/5.0)+32)
         time.sleep(1)
-        #for i in range(1, 10):
-        #    time.sleep(.1)
+        
         
         #Get uV from first Thermo
         self.uv = self.get_uv(self.front_sensor)
@@ -267,8 +277,7 @@ class MainFrame(wx.Frame):
         self.celsius_reverse = self.reverse_poly(self.celsius)
         self.ambient =(((self.celsius*9.0)/5.0)+32)
         time.sleep(1)
-        #for i in range(1, 10):
-        #    time.sleep(.1)
+        
         
         #Get uV from back Thermo
         self.uv = self.get_uv(self.back_sensor)
@@ -328,7 +337,7 @@ class MainFrame(wx.Frame):
         
         
         #Update the thermometer displays
-        #self.ambient.update_gauge(self.ambient)
+        
         if (self.kiln_front > 500):
             self.thermo_front.update_gauge(self.kiln_front)
             
@@ -443,14 +452,17 @@ class MainFrame(wx.Frame):
             self.AutoSave = 'False'
             self.SetStatusText("Auto Save is now off")
     
-    def OnSerial(self, event):    
-        for i in range(256):
-            try:
-                s = serial.Serial(i)
-                print s.portstr
-                s.close()
-            except serial.SerialException:
-                self.SetStatusText("Problem with the serial ports")
+    def OnSerial(self, event): 
+        if (self.debug == 'True'):
+            print "You are trying to change a port"
+        IdNumber = 500
+        for port in self.validPorts:
+            if self.ConfigMenu.IsChecked(IdNumber):
+                self.SerialSelect = port
+                self.SetStatusText("Serial Port Now Set to " + self.SerialSelect)
+                if (self.debug == 'True'):
+                    print port,"Is Checked"
+            IdNumber = IdNumber + 1
                 
     def OnClear(self,event):
         """clear the lists"""
@@ -480,11 +492,15 @@ class MainFrame(wx.Frame):
     def OnStop(self,event):
         self.SetStatusText("Now stops the logging...")
         self.SensorTimer.Stop()
+    
+    def OnQuit(self,event):
+        self.SetStatusText("Now we quit buh bye...")
+        self.Close()
 
     def OnLog(self, event):
         #Open the serial port connection
         try: 
-            self.ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=5)
+            self.ser = serial.Serial(self.SerialSelect, 9600, timeout=5)
             self.SetStatusText("Now starts the logging...")
             self.t1 = time.time()
             self.SensorTimer.Start(60000)
@@ -606,17 +622,6 @@ class MainFrame(wx.Frame):
         self.graph_date = self.date
 
         self.draw_graph()
-        
-    def get_faren(self,address):
-        ser.flushInput()
-        ser.write("\r")
-        ser.write("F")
-        ser.write(address)
-        ser.write("\r")
-        #line = ser.read(5)
-        line = ser.readline()
-        ser.flushInput()
-        return line
 
     def get_celsius(self,address):
         self.ser.flushInput()
@@ -676,8 +681,34 @@ class MainFrame(wx.Frame):
             power = power + 1
         result1 = round(result1,2)
         return result1
-   
-  
+
+    def OutputBoxes(self):
+        """Create Output Boxes"""
+        
+        self.SampleNumLabel = wx.StaticText(self.TopPanel, -1,'Reading',(25,400))
+        self.SampleNumLabel.SetForegroundColour('white')
+        self.SampleNum = wx.TextCtrl(self.TopPanel, -1,"",(25,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.FrontReadingLabel = wx.StaticText(self.TopPanel, -1,'Front Temp',(125,400))
+        self.FrontReadingLabel.SetForegroundColour('white')
+        self.FrontReading = wx.TextCtrl(self.TopPanel, -1,"",(125,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.BackReadingLabel = wx.StaticText(self.TopPanel, -1,'Back Temp',(225,400))
+        self.BackReadingLabel.SetForegroundColour('white')
+        self.BackReading = wx.TextCtrl(self.TopPanel, -1,"",(225,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.FrontHighReadingLabel = wx.StaticText(self.TopPanel, -1,'Front High',(325,400))
+        self.FrontHighReadingLabel.SetForegroundColour('white')
+        self.FrontHighReading = wx.TextCtrl(self.TopPanel, -1,"",(325,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.BackHighReadingLabel = wx.StaticText(self.TopPanel, -1,'Back High',(425,400))
+        self.BackHighReadingLabel.SetForegroundColour('white')
+        self.BackHighReading = wx.TextCtrl(self.TopPanel, -1,"",(425,415),style=wx.TE_READONLY|wx.TE_CENTER)
+        
+        self.ElapsedReadingLabel = wx.StaticText(self.TopPanel, -1,'Elapsed Time',(525,400))
+        self.ElapsedReadingLabel.SetForegroundColour('white')
+        self.ElapsedReading = wx.TextCtrl(self.TopPanel, -1,"",(525,415),size=(300, 26),style=wx.TE_READONLY|wx.TE_CENTER)
+        
         
 class Thermometer(wx.Panel):
     
@@ -699,9 +730,6 @@ class Thermometer(wx.Panel):
         self.update_gauge(self.SaveTemp)
         #self.dc.DrawBitmap(self.gauge, self.x, self.y)
         
-    
-    
-       
     def update_gauge(self,temp):
         temp = round(temp,2)
         if (temp <> self.SaveTemp):
