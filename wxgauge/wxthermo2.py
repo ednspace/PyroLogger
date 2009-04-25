@@ -503,7 +503,7 @@ class MainFrame(wx.Frame):
             self.ser = serial.Serial(self.SerialSelect, 9600, timeout=5)
             self.SetStatusText("Now starts the logging...")
             self.t1 = time.time()
-            self.SensorTimer.Start(60000)
+            self.SensorTimer.Start(30000)
         except:
             self.SetStatusText("Invalid Serial Port Selected")
 
