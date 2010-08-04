@@ -20,6 +20,8 @@
 Last Update April 2009
 Program edited to allow for two thermocouples, one in the front, one in the back
 Pretty Major ReWrite, Bug Fixing, Feature Enhancement Etc...
+
+If you want to just graph one Thermocouple comment out graph line around line number 430
 """
 
 import wx,os,sys,math,time,matplotlib,serial
@@ -424,7 +426,7 @@ class MainFrame(wx.Frame):
         self.subplot.grid(True)
         
         self.subplot.plot(self.graph_date, self.graph_front, 'r-', linewidth = 1)
-        self.subplot.plot(self.graph_date, self.graph_back, 'b-', linewidth = 1)
+        #self.subplot.plot(self.graph_date, self.graph_back, 'b-', linewidth = 1)
         
         #self.subplot.plot(self.date, self.kiln_front_array, 'r-', linewidth = 1)
         #self.subplot.plot(self.date, self.kiln_back_array, 'b-', linewidth = 1)
