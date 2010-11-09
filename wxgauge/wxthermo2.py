@@ -62,6 +62,12 @@ class MainFrame(wx.Frame):
         
         #Instantiate the Two Thermometers One for the Kiln One for ambient
         #self.ambient=Thermometer(gauge1,-1,'amb_F',0,0,os.path.join("images",'ambient_F.png'))
+        
+
+
+
+        
+        
         self.thermo_front=Thermometer(gauge1,-1,'kiln_F_H',0,0,os.path.join("images",'kiln_FH.png'))
         self.thermo_back=Thermometer(gauge2,-1,'kiln_F_H',0,0,os.path.join("images",'kiln_FH.png'))
         
@@ -426,7 +432,7 @@ class MainFrame(wx.Frame):
         self.subplot.grid(True)
         
         self.subplot.plot(self.graph_date, self.graph_front, 'r-', linewidth = 1)
-        #self.subplot.plot(self.graph_date, self.graph_back, 'b-', linewidth = 1)
+        self.subplot.plot(self.graph_date, self.graph_back, 'b-', linewidth = 1)
         
         #self.subplot.plot(self.date, self.kiln_front_array, 'r-', linewidth = 1)
         #self.subplot.plot(self.date, self.kiln_back_array, 'b-', linewidth = 1)

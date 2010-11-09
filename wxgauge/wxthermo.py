@@ -38,8 +38,12 @@ class MainFrame(wx.Frame):
         
         
         #Instantiate the Two Thermometers One for the Kiln One for ambient
-        self.ambient=Thermometer(gauge1,-1,'amb_F',0,0,os.path.join("images",'ambient_F.png'))
-        self.kiln=Thermometer(gauge2,-1,'kiln_F_H',0,0,os.path.join("images",'kiln_FH.png'))
+        
+		
+		
+        
+        self.ambient=Thermometer(gauge1,-1,'amb_F',0,0,os.path.join('images','ambient_F.png'))
+        self.kiln=Thermometer(gauge2,-1,'kiln_F_H',0,0,os.path.join('images','kiln_FH.png'))
         
         self.ambient.update_gauge(17)
         self.kiln.update_gauge(450)
