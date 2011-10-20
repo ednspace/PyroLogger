@@ -1,0 +1,32 @@
+Checking non-numbered parts...
+
+Checking duplicated references...
+
+Checking nets with only one connection...
+
+Checking type of pins connected to a net...
+ERROR: unknown: R1:1 connected to input/output: U1:16 
+ERROR: unknown: C2:2 connected to input/output: U1:9 
+ERROR: unknown: C2:1 connected to input/output: U1:8 
+ERROR: unknown: D1:3 connected to input/output: U1:7 
+ERROR: unknown: D1:3 connected to totem-pole: T2:1 
+ERROR: unknown: C1:1 R1:2 D1:2 connected to unknown: C1:1 R1:2 D1:2 
+ERROR: unknown: C1:1 R1:2 D1:2 connected to input/output: U1:15 U1:2 
+ERROR: unknown: C1:2 D1:1 connected to unknown: C1:2 D1:1 
+ERROR: unknown: C1:2 D1:1 connected to input/output: U1:13 U1:11 U1:12 
+ERROR: unknown: C1:2 D1:1 connected to totem-pole: T1:1 T3:1 
+
+Checking unconnected pins...
+ERROR: Unconnected pin U1:1
+ERROR: Unconnected pin U1:3
+ERROR: Unconnected pin U1:10
+ERROR: Unconnected pin U1:14
+
+Checking slots...
+
+Checking duplicated slots...
+
+Checking unused slots...
+
+No warnings found. 
+Found 14 errors.

@@ -1,0 +1,355 @@
+%!PS-Adobe-3.0
+%%Title: (unknown), solder paste, component side
+%%Creator: pcb-bin 20050609
+%%CreationDate: Wed Jan 11 11:09:04 2006
+%%For: ed (Eric Daine)
+%%LanguageLevel: 1
+%%Orientation: Portrait
+%%Pages: 1
+%%PageOrder: Ascend
+%%DocumentMedia: A4 594 841
+%%EndComments
+%%BeginProlog
+
+/PcbDict 200 dict def
+PcbDict begin
+PcbDict /DictMatrix matrix put
+
+% some constants
+/Black {0.0 mysetgray} def
+/White {1.0 mysetgray} def
+/TAN {0.207106781} def
+/MTAN {-0.207106781} def
+
+% draw a filled polygon
+% get (x,y)... and number of points from stack
+/PO {
+	/number exch def
+	newpath
+	moveto
+	number 1 sub { lineto } repeat
+	closepath fill stroke
+} def
+
+/P {
+% draw a pin-polygon,
+% get x, y and thickness from stack
+	/thickness exch def /y exch def /x exch def
+	gsave x y translate thickness thickness scale
+	0.5  MTAN
+	TAN  -0.5
+	MTAN -0.5
+	-0.5 MTAN
+	-0.5 TAN
+	MTAN 0.5
+	TAN  0.5
+	0.5  TAN
+	8 PO grestore
+} def
+
+/PV {
+% pin or via, x, y and thickness are on the stack
+	/drillinghole exch def /thickness exch def /y exch def /x exch def
+	x y thickness P
+% draw drilling hole
+	gsave White 0 setlinewidth
+   newpath x y drillinghole 2 div 0 360 arc closepath fill stroke
+   grestore
+} def
+
+/PVR {
+% pin or via, x, y and thickness are on the stack
+	/drillinghole exch def /thickness exch def /y exch def /x exch def
+	gsave 0 setlinewidth
+	newpath x y thickness 2 div 0 360 arc closepath fill stroke
+% draw drilling whole
+	White
+	newpath x y drillinghole 2 div 0 360 arc closepath fill stroke
+	grestore
+} def
+
+/PVSQ {
+% square pin or via, x, y and thickness are on the stack
+	/drillinghole exch def /thickness exch def /y exch def /x exch def
+	newpath x thickness 2 div sub y thickness 2 div sub moveto
+	thickness 0 rlineto 0 thickness rlineto
+	thickness neg 0 rlineto closepath fill stroke
+% draw drilling hole
+	gsave White 0 setlinewidth
+   newpath x y drillinghole 2 div 0 360 arc closepath fill stroke
+   grestore
+} def
+
+/DH {
+% drill helpher; x, y, hole, copper-thickness are on stack
+	/copper exch def /hole exch def /y exch def /x exch def
+   gsave copper setlinewidth
+   newpath x y hole copper add 2 div 0 360 arc closepath stroke
+   grestore
+} def
+
+/L {
+% line, get x1, y1, x2, y2 and thickness from stack
+	/thick exch def /y2 exch def /x2 exch def /y1 exch def /x1 exch def
+	gsave thick setlinewidth
+	x1 y1 moveto x2 y2 lineto stroke
+	grestore
+} def
+
+/CL {
+% line, get x1, y1, x2, y2 and thickness from stack
+	/thick exch def /y2 exch def /x2 exch def /y1 exch def /x1 exch def
+	gsave White thick setlinewidth
+	x1 y1 moveto x2 y2 lineto stroke
+	grestore
+} def
+
+/B {
+% filled box, get x1, y1, x2 and y2 from stack
+	/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+	newpath
+	x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+	closepath fill stroke
+} def
+
+/PA {
+% pad, same as line
+	L
+} def
+
+/A {
+% arc for elements, get x, y, width, height, thickness
+% startangle and delta-angle from stack
+  /delta exch def /start exch def /thickness exch def
+  /height exch def /width exch def /y exch def /x exch def
+% draw it
+	gsave thickness setlinewidth /save DictMatrix currentmatrix def
+% scaling is less then zero because the coord system has to be swapped
+	x y translate width neg height scale
+	0 0 1 start start delta add arc save setmatrix stroke
+	grestore
+} def
+
+/CA {
+% arc for elements, get x, y, width, height, thickness
+% startangle and delta-angle from stack
+  /delta exch def /start exch def /thickness exch def
+  /height exch def /width exch def /y exch def /x exch def
+% draw it
+	gsave White thickness setlinewidth /save DictMatrix currentmatrix def
+% scaling is less then zero because the coord system has to be swapped
+	x y translate width neg height scale
+	0 0 1 start start delta add arc save setmatrix stroke
+	grestore
+} def
+
+/CLRPV {
+% clears a pin/via for groundplane; x,y and thickness are on stack
+   /thickness exch def /y exch def /x exch def
+	gsave White x y thickness P grestore
+} def
+
+/CLRPVSQ {
+% clears a square pin, x,y and thickness are on stack
+	/thickness exch def /y exch def /x exch def
+   gsave White
+	newpath x thickness 2 div sub y thickness 2 div sub moveto
+	thickness 0 rlineto 0 thickness rlineto
+	thickness neg 0 rlineto closepath fill stroke
+	grestore
+} def
+
+/CLRPVR {
+% clears a round pin/via for groundplane; x,y and thickness are on the stack
+	/thickness exch def /y exch def /x exch def
+	gsave White 0 setlinewidth
+	newpath x y thickness 2 div 0 360 arc closepath fill stroke
+	grestore
+} def
+
+/CLRPA {
+% clear line, get x1, y1, x2, y2 and thickness from stack
+	/thick exch def /y2 exch def /x2 exch def /y1 exch def /x1 exch def
+	gsave White thick setlinewidth
+	x1 y1 moveto x2 y2 lineto stroke
+	grestore
+} def
+
+/CLRB {
+% cleared box, get x1, y1, x2 and y2 from stack
+	/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+	gsave White newpath
+	x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+	closepath fill stroke
+	grestore
+} def
+
+/FILL {
+% draw a filled rectangle for the ground plane
+% get x1, y1, x2 and y2 from stack
+	/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+   gsave 0 setlinewidth
+	newpath
+	x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+	closepath fill stroke
+   grestore
+} def
+
+/Outline {
+% outline, get x1, y1, x2 and y2 from stack
+	/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+   gsave 0.175 setlinewidth
+	newpath
+	x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+	closepath stroke
+   grestore
+} def
+
+/Alignment {
+% alignment targets, get x1, y1, x2, y2 and distance from stack
+	/dis exch def /y2 exch def /x2 exch def /y1 exch def /x1 exch def
+   gsave 0.175 setlinewidth
+   newpath x1 y1 dis add moveto
+      0 dis 2 mul neg rlineto
+      dis neg dis rmoveto
+      dis 2 mul 0 rlineto
+   stroke
+   newpath x1 y1 dis 0 90 arcn stroke
+   newpath x1 y2 dis sub moveto 0 dis rlineto dis 0 rlineto stroke
+   newpath x2 y2 dis sub moveto
+      0 2 dis mul rlineto
+      dis dup neg rmoveto
+      2 dis mul neg 0 rlineto   stroke
+   newpath x2 y1 dis add moveto 0 dis neg rlineto dis neg 0 rlineto stroke
+   grestore
+} def
+
+/mysetgray { setgray } def
+/mysetrgbcolor { setrgbcolor } def
+
+%%EndProlog
+%%BeginDefaults
+%%EndDefaults
+%%BeginSetup
+0.0 setlinewidth
+1 setlinecap
+Black
+%%EndSetup
+%%Page: 1 1
+%%BeginPageSetup
+%%EndPageSetup
+gsave White newpath
+178 311 moveto 415 311 lineto 415 529 lineto 178 529 lineto
+closepath fill stroke grestore
+% PCBMIN(0,0), PCBMAX(326499,299999)
+% PCBOFFSET(249800,434501), PCBSCALE(1.00000)
+% PCBSTARTDATA --- do not remove ---
+gsave
+0.00072 0.00072 scale
+249800 434501 translate
+1.000 1.000 scale
+0 0 translate
+240080 173290 248480 178090 B
+240080 182890 248480 187690 B
+221280 182540 225280 185940 B
+221280 174740 225280 178140 B
+213080 178640 217080 182040 B
+227490 222520 232290 230920 B
+237090 222520 241890 230920 B
+271800 193430 280200 198230 B
+271800 203030 280200 207830 B
+221568 198337 225900 199951 B
+221568 200896 225900 202510 B
+221568 203455 225900 205069 B
+221568 206014 225900 207628 B
+221568 208572 225900 210186 B
+221568 211131 225900 212745 B
+221568 213690 225900 215304 B
+221568 216249 225900 217863 B
+243220 216249 247552 217863 B
+243220 213690 247552 215304 B
+243220 211131 247552 212745 B
+243220 208572 247552 210186 B
+243220 206014 247552 207628 B
+243220 203455 247552 205069 B
+243220 200896 247552 202510 B
+243220 198337 247552 199951 B
+76030 173290 84430 178090 B
+76030 182890 84430 187690 B
+57230 182540 61230 185940 B
+57230 174740 61230 178140 B
+49030 178640 53030 182040 B
+63440 222520 68240 230920 B
+73040 222520 77840 230920 B
+107750 193430 116150 198230 B
+107750 203030 116150 207830 B
+57518 198337 61850 199951 B
+57518 200896 61850 202510 B
+57518 203455 61850 205069 B
+57518 206014 61850 207628 B
+57518 208572 61850 210186 B
+57518 211131 61850 212745 B
+57518 213690 61850 215304 B
+57518 216249 61850 217863 B
+79170 216249 83502 217863 B
+79170 213690 83502 215304 B
+79170 211131 83502 212745 B
+79170 208572 83502 210186 B
+79170 206014 83502 207628 B
+79170 203455 83502 205069 B
+79170 200896 83502 202510 B
+79170 198337 83502 199951 B
+240130 23290 248530 28090 B
+240130 32890 248530 37690 B
+221330 32540 225330 35940 B
+221330 24740 225330 28140 B
+213130 28640 217130 32040 B
+227540 72520 232340 80920 B
+237140 72520 241940 80920 B
+271850 43430 280250 48230 B
+271850 53030 280250 57830 B
+221618 48337 225950 49951 B
+221618 50896 225950 52510 B
+221618 53455 225950 55069 B
+221618 56014 225950 57628 B
+221618 58572 225950 60186 B
+221618 61131 225950 62745 B
+221618 63690 225950 65304 B
+221618 66249 225950 67863 B
+243270 66249 247602 67863 B
+243270 63690 247602 65304 B
+243270 61131 247602 62745 B
+243270 58572 247602 60186 B
+243270 56014 247602 57628 B
+243270 53455 247602 55069 B
+243270 50896 247602 52510 B
+243270 48337 247602 49951 B
+76080 23290 84480 28090 B
+76080 32890 84480 37690 B
+57280 32540 61280 35940 B
+57280 24740 61280 28140 B
+49080 28640 53080 32040 B
+63490 72520 68290 80920 B
+73090 72520 77890 80920 B
+107800 43430 116200 48230 B
+107800 53030 116200 57830 B
+57568 48337 61900 49951 B
+57568 50896 61900 52510 B
+57568 53455 61900 55069 B
+57568 56014 61900 57628 B
+57568 58572 61900 60186 B
+57568 61131 61900 62745 B
+57568 63690 61900 65304 B
+57568 66249 61900 67863 B
+79220 66249 83552 67863 B
+79220 63690 83552 65304 B
+79220 61131 83552 62745 B
+79220 58572 83552 60186 B
+79220 56014 83552 57628 B
+79220 53455 83552 55069 B
+79220 50896 83552 52510 B
+79220 48337 83552 49951 B
+grestore
+% PCBENDDATA --- do not remove ---
+showpage
+%%EOF

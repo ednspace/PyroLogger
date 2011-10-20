@@ -1,24 +1,3 @@
-To Do List
-Incorporate old pyrologger code functions
-Add Time Event to better control graph pane
-Add Time axis to the graph pane
-Create function for initialization of pygame instead of inline in main
-Watch the python screencast for pygame to get a better handle on code organization
-Get the buttons working possibly add text
-Find a gui for file managment
-Add a save graph feature
-Add a load graph feature
-Add a change comport feature
-Add a report if connected/connect button search for pyrologger hardware
-Add a config file parser
-
-
-fix kiln thermo text box so it reflects even on the low end
-add another scale for the low end of the thermo thermometer
-fix weirdo date tick problem at startup with long times in the evenings
-add data import line overlay button
-
-research overlay composite image in pygame
-
-
-
+Very early code.
+Trying to use pyGame to do graphing.  
+Code here for archival purposes only...

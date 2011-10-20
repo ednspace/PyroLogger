@@ -1,0 +1,24 @@
+Notes
+Oct 2010
+Looks like under Arch at least all you have to do once you get the 
+system going is to...
+pacman -S python
+pacman -S python-pyserial
+pacman -S wxpython
+pacman -S python-matplotlib
+
+install subversion
+pacman -S subversion
+
+checkout the package from your home directory as a normal user
+https://pyrologger.googlecode.com/svn/trunk/ pyrologger --username 
+ednspace
+
+and it opens and runs
+
+May 13, 2008
+Test of current draw with laptop B130 Dell
+KillAWatt reports 30 watts .56 amps 119 volts
+If we have a 90 amp hour battery. 30/12=2.5 (figure 3 amps for safety)
+90 amp hour battery should give 90/3=30 hours of life for logging 1 full day
+More time if screen is off.
