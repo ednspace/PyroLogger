@@ -17,7 +17,12 @@
 
 
 """
-Last Update April 2009
+Updated October 2011
+fixed print to print()
+changed coeffecients for reverse polynomial equation.  Converts deg C in uV 
+
+
+Updated April 2009
 Program edited to allow for two thermocouples, one in the front, one in the back
 Pretty Major ReWrite, Bug Fixing, Feature Enhancement Etc...
 
@@ -264,13 +269,20 @@ class MainFrame(wx.Frame):
         self.celsius = self.get_celsius(self.front_sensor)
         self.celsius_reverse = self.reverse_poly(self.celsius)
         self.ambient =(((self.celsius*9.0)/5.0)+32)
+        #print ("Front Ambient ==> ", self.ambient)
         time.sleep(1)
         
         
-        #Get uV from first Thermo
+        #Get uV from Front Thermo
         self.uv = self.get_uv(self.front_sensor)
         self.uv = self.uv + self.celsius_reverse
-        self.temp_uv = self.convert_uv(self.uv)
+        self.uv = self.uv * 1000
+        
+        if (self.uv > 20.644):
+            self.temp_uv = self.convert_uv_high(self.uv)
+        else:
+			self.temp_uv = self.convert_uv_low(self.uv)
+		      
         self.kiln_front = (((self.temp_uv*9.0)/5.0)+32)
         
         #Make sure thermo measurement is not less then ambient
@@ -284,13 +296,23 @@ class MainFrame(wx.Frame):
         self.celsius = self.get_celsius(self.back_sensor)
         self.celsius_reverse = self.reverse_poly(self.celsius)
         self.ambient =(((self.celsius*9.0)/5.0)+32)
+        #print ("Back Ambient ==> ", self.ambient)
         time.sleep(1)
         
         
         #Get uV from back Thermo
         self.uv = self.get_uv(self.back_sensor)
         self.uv = self.uv + self.celsius_reverse
-        self.temp_uv = self.convert_uv(self.uv)
+        self.uv = self.uv * 1000
+        
+        if (self.uv > 20.644):
+            self.temp_uv = self.convert_uv_high(self.uv)
+            
+        else:
+			self.temp_uv = self.convert_uv_low(self.uv)
+			
+        
+        
         self.kiln_back = (((self.temp_uv*9.0)/5.0)+32)
         
         #Make sure thermo measurement is not less then ambient
@@ -338,7 +360,7 @@ class MainFrame(wx.Frame):
                 sensor_average = sensor_average + sample
             sensor_average = sensor_average / 20
             sensor_average = round(sensor_average,2)
-            print "Ambient===>",self.ambient,"kiln Temp===>",self.kiln_F,"average is ==>", sensor_average
+            print ("Ambient===>",self.ambient,"kiln Temp===>",self.kiln_F,"average is ==>", sensor_average)
             self.kiln_F = sensor_average
         """
         
@@ -383,7 +405,7 @@ class MainFrame(wx.Frame):
             self.graph_date=self.date
             
             
-        print "front=>", round(self.kiln_front,1), "     back=>", round(self.kiln_back,1), "     ambient=>", round(self.ambient,1), "     Samples==>",self.count
+        print ("front=>", round(self.kiln_front,1), "     back=>", round(self.kiln_back,1), "     ambient=>", round(self.ambient,1), "     Samples==>",self.count)
         
         #print "Ambient===>",self.ambient,"kiln front===>",self.kiln_front, "kiln back===>",self.kiln_back,"Samples==>",self.count
         
@@ -393,7 +415,7 @@ class MainFrame(wx.Frame):
             self.sample_count = 0
         if (self.count%100 == 0) & (self.AutoSave == 'True'):
             if (self.debug == 'True'):
-                print "I gots 100 samples, now ehm gonna save em"
+                print ("I gots 100 samples, now ehm gonna save em")
             self.OnSave(None)
         
         
@@ -411,7 +433,7 @@ class MainFrame(wx.Frame):
         
     def draw_graph(self):
         if (self.debug == 'True'):
-            print "updating the graph ;)"
+            print ("updating the graph ;")
         
         self.subplot.clear()
         self.subplot = self.fig.add_subplot(111)
@@ -451,8 +473,8 @@ class MainFrame(wx.Frame):
                 
     def OnAutoSave(self, event):
         if (self.debug == 'True'):
-            print "Somebody clicked on Autosave"
-            print self.ConfigMenu.IsChecked(110);
+            print ("Somebody clicked on Autosave")
+            print (self.ConfigMenu.IsChecked(110))
         if (self.ConfigMenu.IsChecked(110)):
             self.AutoSave = 'True'
             self.SetStatusText("Auto Save is on... Saving every 100 samples")
@@ -462,14 +484,14 @@ class MainFrame(wx.Frame):
     
     def OnSerial(self, event): 
         if (self.debug == 'True'):
-            print "You are trying to change a port"
+            print ("You are trying to change a port")
         IdNumber = 500
         for port in self.validPorts:
             if self.ConfigMenu.IsChecked(IdNumber):
                 self.SerialSelect = port
                 self.SetStatusText("Serial Port Now Set to " + self.SerialSelect)
                 if (self.debug == 'True'):
-                    print port,"Is Checked"
+                    print (port,"Is Checked")
             IdNumber = IdNumber + 1
                 
     def OnClear(self,event):
@@ -603,8 +625,8 @@ class MainFrame(wx.Frame):
         # ok they loaded
         self.filename = dialog.GetPath()
         self.SetTitle("PyroLogger        "+self.filename)
-        print "You Pressed Load"
-        print "Slurping Raw Data... ummmmmm!!!"
+        print ("You Pressed Load")
+        print ("Slurping Raw Data... ummmmmm!!!")
         file = open(self.filename, 'r')
         skip = 0
         self.date = []
@@ -652,7 +674,8 @@ class MainFrame(wx.Frame):
         line = self.ser.readline()
         self.ser.flushInput()
         return float(line)
-
+    """
+    #This is older code and didn't give good values for ambient at higher temps use new code below
     def reverse_poly(self,x):
         #Takes in Temp in deg C and gives back Uv's, used to adjust for ambiant temperature
         coeffecients = [-1.76E1, 3.8921E1, 1.8559E-2, -9.9458E-5, 3.18409E-7, -5.607284E-10, 5.607506E-13, -3.20207E-16, 9.71511E-20, -1.21047E-23]
@@ -679,9 +702,73 @@ class MainFrame(wx.Frame):
         result2 = result2 + added
         result2 = result2 / 1000000
         return (result2)
+    """
+    def reverse_poly(self,x):
+        #Takes in Temp in deg C and gives back Uv's, used to adjust for ambiant temperature supposed to be good from 0-1372 deg C
+        coeffecients = [-1.7600413686E-2, 3.8921204975E-2, 1.8558770032E-5, -9.9457592874E-8, 3.1840945719E-10, -5.6072844889E-13, 5.6075059059E-16, -3.2020720003E-19, 9.7151147152E-23, -1.2104721275E-26]
+        
+        result2 = 0.0
+        #added = 0.0
+        power = 0
 
-    def convert_uv(self,uv):
-        coefficients = [0.226584602, 24152.10900, 67233.4248, 2210340.682, -860963914.9, 4.83506e10, -1.18452e12, 1.38690e13, -6.33708e13]
+
+        for c in coeffecients:
+            result2 = (result2 + c * pow(x,power))
+            power = power + 1
+        #result2 = result2 + added
+        #result2 = result2 / 1000000
+        result2 = result2 / 1000
+        return (result2)
+ 
+ 
+
+    def convert_uv_low(self,uv):
+        """The coefficients for Temperature range 0 deg C to 500 deg C
+        Voltage range 0 mV to 20.644 mV
+        Error range .04 deg C to -.05 deg C are:
+			C0 = 0
+			C1 = 2.508355 * 10^1
+			C2 = 7.860106 * 10^-2
+			C3 = -2.503131 *10^-1
+			C4 = 8.315270 * 10^-2
+			C5 = -1.228034 * 10^-2
+			C6 = 9.804036 * 10^-4
+			C7 = -4.413030 * 10^-5
+			C8 = 1.057734 * 10^-6
+			C9 = -1.052755 * 10^-8
+		"""
+		
+        #coefficients = [0.226584602, 24152.10900, 67233.4248, 2210340.682, -860963914.9, 4.83506e10, -1.18452e12, 1.38690e13, -6.33708e13]
+        coefficients = [0, 2.508355E1, 7.860106E-2, -2.503131E-1, 8.315270E-2, -1.228034E-2, 9.804036E-4, -4.413030E-5, 1.057734E-6, -1.052755E-8]
+       
+        result1 = 0.0
+        power = 0
+        
+        for c in coefficients:
+            result1 = result1 + c * pow(uv,power)
+            power = power + 1
+        result1 = round(result1,2)
+        return result1
+        
+        
+    def convert_uv_high(self,uv):
+        """The coefficients for Temperature range 500 deg C to 1372 deg C
+        Voltage range 20.644 mV to 54.886 mV
+        Error range .06 deg C to -.05 deg C are:
+            C0 = -1.318058 * 10^2
+            C1 = 4.830222 * 10^1
+            C2 = -1.646031
+            C3 = 5.464731 * 10^-2
+            C4 = -9.650715 * 10^-4
+            C5 = 8.802193 * 10^-6
+            C6 = -3.110810 * 10^-8
+            C7 = 0
+            C8 = 0
+            C9 = 0
+		"""
+        
+        coefficients = [-1.318058E2, 4.830222E1, -1.646031, 5.464731E-2, -9.650715E-4, 8.802193E-6, -3.110810E-8, 0, 0, 0]
+       
         result1 = 0.0
         power = 0
         for c in coefficients:
@@ -740,7 +827,7 @@ class Thermometer(wx.Panel):
         
     def update_gauge(self,temp):
         temp = round(temp,2)
-        if (temp <> self.SaveTemp):
+        if (temp != self.SaveTemp):
             self.SaveTemp = temp
             
         if(self.scale == 'amb_F'):  #Ambient Farenheit Scale            
