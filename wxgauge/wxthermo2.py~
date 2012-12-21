@@ -539,7 +539,7 @@ class MainFrame(wx.Frame):
 
     def OnAbout(self, event):
         self.SetStatusText("All about ...PyroLogger...")
-        dlg = wx.MessageDialog(self, 'When you as the Pyro want to Log!  Last updated October 2012', 'About Pyrologger', wx.OK|wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(self, 'When you as the Pyro want to Log!  Last updated March 2009', 'About Pyrologger', wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
                    
