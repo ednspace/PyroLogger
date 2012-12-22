@@ -1,5 +1,0 @@
-Log Date and Time Sun, 01 Aug 2010 06:50:19
-Fields:Ambient KilnFront KilnBack Date Date2Num
-
-(0, '32.0', '1956.2', '32.0', 'Sun, 01 Aug 2010 06:49:49', '733985.28460091341')
-(1, '32.0', '1958.2', '32.0', 'Sun, 01 Aug 2010 06:50:19', '733985.28494799358')
