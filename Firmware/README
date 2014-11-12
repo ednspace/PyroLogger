@@ -1,0 +1,19 @@
+PyrologgerV2
+
+This is an updated version of the old Pyrologger codebase. It will feature a PyQT/QWT GUI interface to a custom hardware control board. The new board will have an upgraded microcontroller, the PIC 16F1827 and a Dallas 1 Wire Bus Master chip and an FTDI serial to USB converter for interaction with the computer.
+
+It is planned to bring out all of the old Pyrologger features but finally move to a more robust hardware platform. There will eventually be software enhancements as well, once all the bugs are worked out with the new hardware. 
+
+I will be keeping Firmware code, GUI code, and board files for the interface board as well as the thermocouple sensors all under this new GIT repository.
+
+As they say, stay tuned!
+
+LICENSE:
+
+The Hardware and software in this project are released under the Creative Commons Attribution-Share Alike 3.0 United States License.
+
+http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
+
+You may reproduce it for both your own personal use, and for commercial use if you provide a link to the original creator of the project on any documentation or website.
+
+You may also modify the files, but you must then release them as well under the same terms.

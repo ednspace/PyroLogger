@@ -1,0 +1,6 @@
+
+To start cu terminal and connect to the PyroLogger
+cu -l /dev/ttyS0 dir
+
+To use screen try:
+screen /dev/ttyUSB0  9600   // Kill screen with ^ak or control-a k

@@ -1,0 +1,18 @@
+gEDA/gschem version 1.4.3.20081231
+gEDA/gschem comes with ABSOLUTELY NO WARRANTY; see COPYING for more details.
+This is free software, and you are welcome to redistribute it under certain
+conditions; please see the COPYING file for more details.
+
+Read system-gafrc file [/etc/gEDA/system-gafrc]
+Did not find optional ~/.gEDA/gafrc file [/home/ed/.gEDA]
+Did not find optional local gafrc file [/media/KINGSTON/pcb/ds2760/gafrc]
+Read system-gschemrc file [/etc/gEDA/system-gschemrc]
+Did not find optional ~/.gEDA/gschemrc file [/home/ed/.gEDA]
+Did not find optional local gschemrc file [/media/KINGSTON/pcb/ds2760/gschemrc]
+Read init scm file [/usr/share/gEDA/scheme/gschem.scm]
+Loading schematic [/media/KINGSTON/pcb/ds2760/ds2460.sch]
+Did not find specified gafrc file [/media/KINGSTON/pcb/ds2760/gafrc]
+Component [BAT54S.sym] was not found in the component library
+Component [capacitor-0.sym] was not found in the component library
+Component [capacitor-0.sym] was not found in the component library
+Component [ds2760.sym] was not found in the component library

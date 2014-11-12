@@ -1,6 +1,0 @@
-schematics ds2460.sch
-output-name board
-m4-pcbdir /pcb/pcb/share/pcb/m4/
-elements-directory /pcb/pcb/share/pcb/newlib
-
-

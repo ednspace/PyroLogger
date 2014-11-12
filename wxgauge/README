@@ -1,6 +1,0 @@
-This is where the current version of the code lives...
-wxthermo.py Reads and logs to the screen one thermocouple
-wxthermo2.py Reads and logs two thermocouples
-thermofunctions.py is an include file for repetitive tasks
-images holds some of the icons for the GUI
-graphs is a test folder containing saved graphs
