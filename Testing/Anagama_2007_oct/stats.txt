@@ -1,0 +1,33 @@
+Kiln Stats for October 2007
+Temperatures in Farenheit
+Data Points logged every 30 seconds
+
+Fri
+High Temperature for Front Thermocouple ==> 504.12
+High Temperature for Back Thermocouple ==> 429.08
+Number of Data Points Collected ==========> 248
+
+Sat
+High Temperature for Front Thermocouple ==> 2098.0
+High Temperature for Back Thermocouple ==> 1801.67
+Number of Data Points Collected ==========> 2859
+
+Sun
+High Temperature for Front Thermocouple ==> 2171.64
+High Temperature for Back Thermocouple ==> 2031.64
+Number of Data Points Collected ==========> 2858
+
+Mon
+High Temperature for Front Thermocouple ==> 2291.61
+High Temperature for Back Thermocouple ==> 2249.73
+Number of Data Points Collected ==========> 2858
+
+Tue
+High Temperature for Front Thermocouple ==> 2309.56
+High Temperature for Back Thermocouple ==> 2318.38
+Number of Data Points Collected ==========> 2100
+
+Whole Tamale
+High Temperature for Front Thermocouple ==> 2309.56
+High Temperature for Back Thermocouple ==> 2318.38
+Number of Data Points Collected ==========> 10923

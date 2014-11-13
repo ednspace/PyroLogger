@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>Fake Thermocouple</title>
+<link href="../../../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1><Center>Fake Thermocouple</center></h1>
+<!--#include file="../../../menu.txt"-->
+
+<h2><center>Description</center></b></h2>
+<p><center><IMG SRC="fake_thermo1.jpg"></center></p>
+<p>If you are interested in building circuits that will incorporate thermocouples, its nice to have a low millivolt supply for testing and simulating a thermocouple in a heat source.  It saves time and energy, keeping you from cranking up the hot plate or the blow torch.  Most power supplies will not deliver the low millivolts needed to simulate a thermocouple in a heat source.  This device allows you to quickly sweep to a general voltage and then fine tune to a specific value.  It uses one 9V battery as a power source and is portable.  Voltage ranges on the course dial are from approximately 3mV to 200mV and the fine tune dial will adjust about 4mV around the initial set point.</p>  
+
+<h2><center>Construction Notes</center></b></h2>
+<p>This was built as a one off using point to point wiring on a proto board.  Do to the construction technique I have no board files, however I have included the schematic below in case you want to build one for yourself.  The proto board was hot glued to a 9 volt battery holder, making the end result portable.  Also, added a switch and led indicator so hopefully I won't leave it on and run the battery down.  Note the picture is a little outdated.  The electrolytic caps are from a previous build in which I used an opamp that needed plus and minus supply voltage.  In that build the 9V source was split with the electrolytics and some resistors in order to provide a plus and minus supply for the opamp.  The current build uses a single supply opamp so the electrolytic caps and resistors seen in the photo are no longer needed.</p>
+
+<h2><center>How the Circuit Works</center></b></h2>
+<p>A reference voltage is set up through the 3.3k and the voltage reference diode.  This provides an input to the 47k resistor that is always 1.2 volts even as the battery voltage sags.  On the other side of the 47k are two potentiometers.  The top one is a multiturn pot for course adjustment and the bottom is a single turn for fine adjustment.  These pots plus the 47k divide the 1.2 reference on down to a range from 3mV to 200mV or so.  The output from the wiper of the top most pot is fed into the opamp which acts as a buffer to isolate the load from the divider.  The caps are there for smoothing and filtering.  I am sure there are many improvements that could be made, but this is pretty quick to mock up and works for testing.  It won't hold the set point for long periods but, its more convenient then creating an actual heat source for your thermocouple.</p>
+
+<h2><center>Notes on Use</center></b></h2>
+<p>To use the device, connect the output of the supply to the point in your circuit where you would normally hook the thermocouple.  It helps to hook a multimeter up in parallel with the output so that you can see the mV's as you change the set points.  Use the rough adjustment pot to get in the general ball park of the voltage you want then use the fine adjustment pot to get very close to the actual value you want to see.  You can use thermocouple look up tables to check your circuit and see if its behaving like you think it should be. </p>
+<p>Enjoy ---ED</p>    
+<h2><b><center>Resources</center></b></h2>
+<p>Links to various schematics, online resources, drawings, etc... that proved useful in completing this project</p>
+<p><b>Schematic of the project</b> 
+<br><a href="fake_scheme.jpg"> Link</a></p>
+
+<p><b>Reference Lookup tables for type K thermocouples</b> 
+<br><a href="typeK_F.pdf"> Fahrenheit</a>  <a href="typeK_C.pdf"> Celsius</a></p>
+
+
+<p><b>Datsheet for the LT1077 OpAmp I used (single supply)</b> 
+<br><a href="LT1077.pdf"> Link</a></p>
+
+<p><b>Datasheet for the voltager reference diode</b> 
+<br><a href="LM185.pdf"> Link</a></p>
+
+<p><b>Schematic which provided sum inspiration was on <a href="http://delabs.netfirms.com/cirdir/index.html">delabs</a> site however can no longer locate</b> 
+<br><a href="ST02_1.pdf"> Link</a></p>
+
+
+
+</body>
+</html>

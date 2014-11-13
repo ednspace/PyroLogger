@@ -1,0 +1,23 @@
+<link><html>
+<head>
+<title>Graphs</title>
+<link href="../../../../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1><Center>Error Checking</center></h1>
+<!--#include file="../../../../menu.txt"-->
+
+<p>Error Produced by the equation at different temperatures</br>
+<a href="error.png"><img src="thumbs/error.png"></a><br>
+<p>Python code to produce Graph <a href="process_type_k.txt"> Link</a></p>
+<p>Text file extraction of type K values <a href="test.txt"> Link</a></p>
+<p>Large text file of all the type K values <a href="Type_K_long_list.txt"> Link</a></p>
+
+
+
+</p>
+
+
+</body>
+</html>

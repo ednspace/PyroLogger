@@ -1,0 +1,36 @@
+Kiln Stats for Oct 2010
+Temperatures in Farenheit
+Front Red
+Back Blue
+Data Points logged every 30 seconds
+
+Day1 (Wed, 27 Oct 2010)
+('High Temperature for Front Thermocouple ==> ', 473.7)
+('High Temperature for Back Thermocouple ==> ', 423.0)
+('Number of Data Points Collected ==========>', 129)
+
+Day2 (Wed, 28 Oct 2010)
+('High Temperature for Front Thermocouple ==> ', 1964.1)
+('High Temperature for Back Thermocouple ==> ', 1791.7)
+('Number of Data Points Collected ==========>', 2876)
+
+Day3 (Wed, 29 Oct 2010)
+('High Temperature for Front Thermocouple ==> ', 2197.3)
+('High Temperature for Back Thermocouple ==> ', 2129.3)
+('Number of Data Points Collected ==========>', 2877)
+
+Day4 (Wed, 30 Oct 2010)
+('High Temperature for Front Thermocouple ==> ', 2256.0)
+('High Temperature for Back Thermocouple ==> ', 2207.1)
+('Number of Data Points Collected ==========>', 2877)
+
+Day5 (Wed, 31 Oct 2010)
+('High Temperature for Front Thermocouple ==> ', 2317.1)
+('High Temperature for Back Thermocouple ==> ', 2293.8)
+('Number of Data Points Collected ==========>', 1027)
+
+Whole Graph
+('High Temperature for Front Thermocouple ==> ', 2317.1)
+('High Temperature for Back Thermocouple ==> ', 2293.8)
+('Number of Data Points Collected ==========>', 9797)
+

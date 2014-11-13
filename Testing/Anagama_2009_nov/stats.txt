@@ -1,0 +1,38 @@
+Kiln Stats for November 2009
+Temperatures in Farenheit
+Front Red
+Back Blue
+Data Points logged every 30 seconds
+
+Day1 (Wed, 18 Nov 2009)
+High Temperature for Front Thermocouple ==>  537.0
+High Temperature for Back Thermocouple ==>  501.8
+Number of Data Points Collected ==========> 151
+
+
+Day2 (Thu, 19 Nov 2009)
+High Temperature for Front Thermocouple ==>  1941.8
+High Temperature for Back Thermocouple ==>  1791.8
+Number of Data Points Collected ==========> 2877
+
+
+Day3 (Fri, 20 Nov 2009)
+High Temperature for Front Thermocouple ==>  2187.6
+High Temperature for Back Thermocouple ==>  2134.0
+Number of Data Points Collected ==========> 2872
+
+
+Day4 (Sat, 21 Nov 2009)
+High Temperature for Front Thermocouple ==>  2194.2
+High Temperature for Back Thermocouple ==>  2174.5
+Number of Data Points Collected ==========> 2877
+
+
+Day5 (Sun, 22 Nov 2009)
+High Temperature for Front Thermocouple ==>  2364.2
+High Temperature for Back Thermocouple ==>  2288.2
+Number of Data Points Collected ==========> 1603
+
+
+
+

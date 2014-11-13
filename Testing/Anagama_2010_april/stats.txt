@@ -1,0 +1,45 @@
+Kiln Stats for April 2010
+Temperatures in Farenheit
+Front Red
+Back Blue
+Data Points logged every 30 seconds
+
+Day1 (Wed, 31 Mar 2010)
+High Temperature for Front Thermocouple ==>  507.0
+High Temperature for Back Thermocouple ==>  464.7
+Number of Data Points Collected ==========> 259
+
+
+Day2 (Thu, 01 Apr 2010)
+High Temperature for Front Thermocouple ==>  1938.2
+High Temperature for Back Thermocouple ==>  1738.2
+Number of Data Points Collected ==========> 2877
+
+
+Day3 (Fri, 02 Apr 2010)
+High Temperature for Front Thermocouple ==>  2170.4
+High Temperature for Back Thermocouple ==>  2145.5
+Number of Data Points Collected ==========> 2877
+
+
+Day4 (Sat, 03 Apr 2010)
+High Temperature for Front Thermocouple ==>  2209.7
+High Temperature for Back Thermocouple ==>  2181.7
+Number of Data Points Collected ==========> 2877
+
+
+Day5 (Sun, 04 Apr 2010)
+High Temperature for Front Thermocouple ==>  2369.9
+High Temperature for Back Thermocouple ==>  2371.5
+Number of Data Points Collected ==========> 1696
+
+
+Whole Graph
+High Temperature for Front Thermocouple ==>  2369.9
+High Temperature for Back Thermocouple ==>  2371.5
+Number of Data Points Collected ==========> 10600
+
+
+
+
+

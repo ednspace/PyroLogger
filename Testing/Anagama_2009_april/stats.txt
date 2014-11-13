@@ -1,0 +1,34 @@
+Kiln Stats for April 2009
+Temperatures in Farenheit
+Front Red
+Back Blue
+Data Points logged every 60 seconds
+
+Day1 (Wed, 01 Apr 2009)
+High Temperature for Front Thermocouple ==>  398.2
+High Temperature for Back Thermocouple ==>  370.1
+Number of Data Points Collected ==========> 119
+
+Day2 (Thu, 02 Apr 2009)
+High Temperature for Front Thermocouple ==>  1874.9
+High Temperature for Back Thermocouple ==>  1683.2
+Number of Data Points Collected ==========> 1440
+
+
+Day3 (Thu, 03 Apr 2009)
+High Temperature for Front Thermocouple ==>  2174.3
+High Temperature for Back Thermocouple ==>  2107.3
+Number of Data Points Collected ==========> 1417
+
+Day4 (Thu, 04 Apr 2009)
+High Temperature for Front Thermocouple ==>  2166.7
+High Temperature for Back Thermocouple ==>  2113.6
+Number of Data Points Collected ==========> 953
+
+Day5 (Thu, 05 Apr 2009)
+High Temperature for Front Thermocouple ==>  2305.2
+High Temperature for Back Thermocouple ==>  2268.5
+Number of Data Points Collected ==========> 723
+
+
+

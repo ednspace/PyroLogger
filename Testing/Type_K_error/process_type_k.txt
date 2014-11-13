@@ -1,0 +1,59 @@
+import string
+import numpy
+import pylab
+
+def convert_uv(uv):
+
+    uv = uv / 1000
+    
+#Source: T. J. Quinn, Temperature , Academic Press Inc.,1990
+#0°C - 1370°C
+#±0.7°C
+  
+    coefficients = [0.226584602, 24152.10900, 67233.4248, 2210340.682, -860963914.9, 4.83506e10, -1.18452e12, 1.38690e13, -6.33708e13]
+    result1 = 0.0
+    power = 0
+    for c in coefficients:
+        
+        result1 = result1 + c * pow(uv,power)
+        power = power + 1
+    result1 = round(result1,2)
+    return result1
+
+f=open('Type_K_long_list.txt', 'r')
+
+count = 1
+k_array = [0]
+c_array = [0]
+
+for line in f:
+    process_line = line.split()
+    process_line = process_line 
+    for i in [2,3,4,5,6,7,8,9,10,11]:
+        #print count,process_line[i]
+        k_array = numpy.append(k_array,float(process_line[i]))
+        c_array  = numpy.append(c_array,count)
+        count = count + 1
+
+convert_array=[]
+diff_array=[]
+
+
+for i in range(0,1371):
+    convert_array = numpy.append(convert_array,convert_uv(k_array[i]))
+    diff_array = numpy.append(diff_array,(convert_array[i]-i))
+    #print k_array[i],convert_uv(k_array[i]),i,diff_array[i]
+
+
+pylab.xlabel('degrees (C)')
+pylab.ylabel('error degrees (C)')
+
+#pylab.plot(k_array, c_array, linewidth=1.0)
+#pylab.plot(k_array, convert_array, linewidth=1.0)
+
+pylab.plot(diff_array)
+#pylab.grid(True)
+pylab.show()
+
+
+    

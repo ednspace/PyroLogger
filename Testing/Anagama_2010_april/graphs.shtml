@@ -1,0 +1,38 @@
+<link><html>
+<head>
+<title>Graphs</title>
+<link href="../../../../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1><Center>Graphs November 2009</center></h1>
+<!--#include file="../../../../menu.txt"-->
+
+<p>First some brief statistics from the firing...<br>
+<a href="stats.txt">Link</a><br>
+
+<p>Whole Graph</br>
+<a href="whole.png"><img src="thumbs/whole.png"></a><br>
+
+Wednesday, 31 Mar 2010<br>
+<a href="day1.png"><img src="thumbs/day1.png"></a><br>
+
+Thursday, 01 Apr 2010<br>
+<a href="day2.png"><img src="thumbs/day2.png"></a><br>
+
+Friday, 02 Apr 2010<br>
+<a href="day3.png"><img src="thumbs/day3.png"></a><br>
+
+Saturday, 03 Apr 2010<br>
+<a href="day4.png"><img src="thumbs/day4.png"></a><br>
+
+Sunday, 04 Apr 2010<br>
+<a href="day5.png"><img src="thumbs/day5.png"></a><br>
+
+</p>
+
+
+
+
+</body>
+</html>
