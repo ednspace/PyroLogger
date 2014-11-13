@@ -1,0 +1,34 @@
+Pyrologger
+
+It seems I used the DS2760 for the sensor in the orginal design the new chip is now DS2762, its an upgrade from DS2760,DS2761 to the new DS2762. Its about 7.25 from mouser for a single chip...
+
+DS2764 is a 2-wire version I2C otherwise looks the same, I think you can get a unique address...
+
+Since I just saw a chip that claims to be latest greatest for thermocouples MAX3185 again I went to investigate. Most of these chips can go to extreme end for type K that a Kiln requires. From the data sheet.
+
+VOUT = (41.276FV/NC) x (TR - TAMB)
+where VOUT is the thermocouple output voltage (FV), TR
+is the temperature of the remote thermocouple junction
+(NC), and TAMB is the temperature of the device (NC).
+Other thermocouple types use a similar straight-line
+approximation but with different gain terms. Note that the
+MAX31855 assumes a linear relationship between temperature
+and voltage. Because all thermocouples exhibit
+some level of nonlinearity, apply appropriate correction
+to the device’s output data.
+
+What a piece of trash, linear equation for a nonlinear device, I guess thats one way to do it... Oh and its 8.00 so … not such a good idea.
+
+Looks like if I use one wire and really want to use distances longer then a meter I may need to finally upgade to a bus maser chip, talk serial to it and let it handle the one wire bus. Course I have been living without this for a long long time now but...
+
+DS2480 is the chip
+
+And this is a good starter article http://www.maximintegrated.com/app-notes/index.mvp/id/4206
+
+
+Looks like the DS2482 is the animal I need only a 1.66 little 8 pin bus master. Should be able to handle the bus and the micro can speak to it via I2C. Non Brainer
+
+I have 2 sample chips of DS2762
+
+and RJ11 socket with a footprint
+https://www.sparkfun.com/products/132
