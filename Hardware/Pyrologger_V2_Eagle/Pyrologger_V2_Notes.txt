@@ -17,7 +17,8 @@ and voltage. Because all thermocouples exhibit
 some level of nonlinearity, apply appropriate correction
 to the device’s output data.
 
-What a piece of trash, linear equation for a nonlinear device, I guess thats one way to do it... Oh and its 8.00 so … not such a good idea.
+That last sentance scares me a little linear equation for a nonlinear device, I guess thats one way to do it...
+Oh and at this time its $8.
 
 Looks like if I use one wire and really want to use distances longer then a meter I may need to finally upgade to a bus maser chip, talk serial to it and let it handle the one wire bus. Course I have been living without this for a long long time now but...
 
