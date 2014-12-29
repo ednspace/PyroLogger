@@ -1,0 +1,1 @@
+This folder contains the newest code for the pyrologger project as of Jan 2015. It uses Meguinolink Pro as an interface and computer display panel to graph and print data coming from two thermocouple modules.
