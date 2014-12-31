@@ -1,8 +1,11 @@
 #include <Arduino.h>
-#include "MegunoLink.h"
+#include <MegunoLink.h>
 #include "CommandParser.h"
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
+
+InterfacePanel Panel;
 
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 2
@@ -22,11 +25,86 @@ float tempF;
 float tempC;
 float front;
 float back;
+int TempType=1; //0=Cel 1=F Default is F
 
 //For the Megunolink time plots
 long LastSent;  // Millis value when the data was last sent. 
-const unsigned SendInterval = 3000; // Interval (milliseconds) between sending analog data
+int SendInterval = 3000; // Interval (milliseconds) between sending analog data
 TimePlot PyroPlot;  // The plot we are sending data to.
+
+//Get the MLP command parser up and running
+MLP::CommandParser<> Parser;
+
+
+//All Thy Functions Lie ;) Below
+void DoSetTempC(MLP::CommandParameter &Parameter)
+{
+  Serial.print(F("Setting TempType to C"));
+  TempType=0;
+  
+}
+
+void DoSetTempF(MLP::CommandParameter &Parameter)
+{
+  Serial.print(F("Setting TempType to F"));
+  TempType=1;
+  
+}
+
+void DoSampleRate(MLP::CommandParameter &Parameter)
+{
+  const char *pchValue;
+
+  pchValue = Parameter.NextParameter();
+  if (pchValue == NULL)
+  {
+    Serial.println(F("Set interval missing parameter"));
+    return;
+  }
+
+  SendInterval = atoi(pchValue);
+}
+
+
+// function to print a device address
+void printAddress(DeviceAddress deviceAddress)
+{
+  for (uint8_t i = 0; i < 8; i++)
+  {
+    // zero pad the address if necessary
+    if (deviceAddress[i] < 16) Serial.print("0");
+    Serial.print(deviceAddress[i], HEX);
+  }
+}
+
+// function to print the temperature for a device
+void printTemperature(DeviceAddress deviceAddress)
+{
+  float tempC = sensors.getTempC(deviceAddress);
+  Serial.print("Temp C: ");
+  Serial.print(tempC);
+  Serial.print(" Temp F: ");
+  Serial.print(DallasTemperature::toFahrenheit(tempC));
+}
+
+// function to print a device's resolution
+void printResolution(DeviceAddress deviceAddress)
+{
+  Serial.print("Resolution: ");
+  Serial.print(sensors.getResolution(deviceAddress));
+  Serial.println();    
+}
+
+// main function to print information about a device
+void printData(DeviceAddress deviceAddress)
+{
+  Serial.print("Device Address: ");
+  printAddress(deviceAddress);
+  Serial.print(" ");
+  printTemperature(deviceAddress);
+  Serial.println();
+}
+
 
 void setup(void)
 {
@@ -98,58 +176,31 @@ void setup(void)
   Serial.print("Device 1 Resolution: ");
   Serial.print(sensors.getResolution(outsideThermometer), DEC); 
   Serial.println();
+
+
+  //Interface Control Panel 
+  Parser.AddCommand(F("SetTempC"), DoSetTempC);
+  Parser.AddCommand(F("SetTempF"), DoSetTempF);
+  Parser.AddCommand(F("SampleRate"),DoSampleRate);
 }
 
-// function to print a device address
-void printAddress(DeviceAddress deviceAddress)
-{
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    // zero pad the address if necessary
-    if (deviceAddress[i] < 16) Serial.print("0");
-    Serial.print(deviceAddress[i], HEX);
-  }
-}
 
-// function to print the temperature for a device
-void printTemperature(DeviceAddress deviceAddress)
-{
-  float tempC = sensors.getTempC(deviceAddress);
-  Serial.print("Temp C: ");
-  Serial.print(tempC);
-  Serial.print(" Temp F: ");
-  Serial.print(DallasTemperature::toFahrenheit(tempC));
-}
-
-// function to print a device's resolution
-void printResolution(DeviceAddress deviceAddress)
-{
-  Serial.print("Resolution: ");
-  Serial.print(sensors.getResolution(deviceAddress));
-  Serial.println();    
-}
-
-// main function to print information about a device
-void printData(DeviceAddress deviceAddress)
-{
-  Serial.print("Device Address: ");
-  printAddress(deviceAddress);
-  Serial.print(" ");
-  printTemperature(deviceAddress);
-  Serial.println();
-}
 
 void loop(void)
 { 
+  //Process any commands from MLP
+  Parser.Process();
+
+
   // call sensors.requestTemperatures() to issue a global temperature 
   // request to all devices on the bus
   //Serial.print("Requesting temperatures...");
-  sensors.requestTemperatures();
-  //Serial.println("DONE");
+  sensors.requestTemperatures(); //Might want to move this into the interval loop instead of main loop
 
-  // print the device information
-  //printData(insideThermometer);
-  //printData(outsideThermometer);
+
+ 
+
+
 
   if ((millis() - LastSent) > SendInterval)
   {
@@ -158,14 +209,35 @@ void loop(void)
     //Update MeguinoLinkPro Plot Window
     tempC = sensors.getTempC(insideThermometer);
     tempF = DallasTemperature::toFahrenheit(tempC);
-    PyroPlot.SendData("Front", tempF, TimePlot::Blue, TimePlot::Solid, 1 , TimePlot::NoMarker);
-    front = tempF;
+
+    if (TempType == 0)
+    	{
+    		front = tempC;
+    	}
+    if (TempType == 1)
+    	{
+    		front = tempF;
+    	}
+
+
+    PyroPlot.SendData("Front", front, TimePlot::Blue, TimePlot::Solid, 1 , TimePlot::NoMarker);
+    //front = tempF;
     
     //Update MeguinoLinkPro Plot Window
     tempC = sensors.getTempC(outsideThermometer);
     tempF = DallasTemperature::toFahrenheit(tempC);
-    PyroPlot.SendData("Back", tempF, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
-    back = tempF;
+
+    if (TempType == 0)
+    	{
+    		back = tempC;
+    	}
+    if (TempType == 1)
+    	{
+    		back = tempF;
+    	}
+
+    PyroPlot.SendData("Back", back, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
+    //back = tempF;
 
     //Print to the Message Monitor Window in MeguinoLinkPro
     Serial.print("{MESSAGE:");
