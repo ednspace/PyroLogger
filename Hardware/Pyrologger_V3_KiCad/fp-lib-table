@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name Teensy)(type Legacy)(uri D:\Projects\pyroLogger\Hardware\Pyrologger_V3_KiCad\Teensy_3_Series_Board_v1.0.kicad_mod)(options "")(descr ""))
+)

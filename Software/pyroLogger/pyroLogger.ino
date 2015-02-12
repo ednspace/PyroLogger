@@ -195,7 +195,7 @@ void loop(void)
   // call sensors.requestTemperatures() to issue a global temperature 
   // request to all devices on the bus
   //Serial.print("Requesting temperatures...");
-  sensors.requestTemperatures(); //Might want to move this into the interval loop instead of main loop
+  //sensors.requestTemperatures(); //Might want to move this into the interval loop instead of main loop
 
 
  
@@ -205,6 +205,7 @@ void loop(void)
   if ((millis() - LastSent) > SendInterval)
   {
     LastSent = millis();
+    sensors.requestTemperatures(); //Lets try doing this call here to see if glitching goes away...
 
     //Update MeguinoLinkPro Plot Window
     tempC = sensors.getTempC(insideThermometer);

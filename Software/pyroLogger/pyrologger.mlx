@@ -171,8 +171,8 @@
   </serial-sources>
   <windows>
     <window>
-      <position left="-8" top="-8" width="1296" height="1000" state="Maximized" />
-      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="1" ActivePane="1">
+      <position left="78" top="307" width="1160" height="690" state="Normal" />
+      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="6" ActivePane="6">
         <Contents Count="7">
           <Content ID="0" PersistString="VisualizerToolbox" AutoHidePortion="0.0970031545741325" IsHidden="False" IsFloat="False" />
           <Content ID="1" PersistString="mlpChart" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
@@ -203,12 +203,12 @@
               </font>
             </title>
             <x-axis>
-              <minimum>42003.530474537052</minimum>
-              <maximum>42003.530636574142</maximum>
-              <major-step>5</major-step>
+              <minimum>42015.75</minimum>
+              <maximum>42016.416666666511</maximum>
+              <major-step>6</major-step>
               <minor-step>1</minor-step>
-              <major-unit>Second</major-unit>
-              <minor-unit>Second</minor-unit>
+              <major-unit>Hour</major-unit>
+              <minor-unit>Hour</minor-unit>
               <minimum-auto>true</minimum-auto>
               <maximum-auto>true</maximum-auto>
               <major-step-auto>true</major-step-auto>
@@ -224,10 +224,10 @@
               </font>
             </x-axis>
             <y-axis>
-              <minimum>16</minimum>
-              <maximum>22</maximum>
-              <major-step>1</major-step>
-              <minor-step>0.2</minor-step>
+              <minimum>58</minimum>
+              <maximum>76</maximum>
+              <major-step>2</major-step>
+              <minor-step>0.5</minor-step>
               <major-unit>Day</major-unit>
               <minor-unit>Day</minor-unit>
               <minimum-auto>true</minimum-auto>
@@ -268,7 +268,7 @@
             <ShowPortInTitle>false</ShowPortInTitle>
             <Channel>TemperatureFeed</Channel>
             <file-path>
-              <path>C:\Users\Customer\Documents\Arduino\Teensy\PyroLogger\pyroLogger\temperatureTest.txt</path>
+              <path>C:\Users\Customer\Desktop\tempeh1.txt</path>
               <relative>false</relative>
             </file-path>
             <IncludeDate>true</IncludeDate>

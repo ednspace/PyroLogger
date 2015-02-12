@@ -1,0 +1,66 @@
+Cmp-Mod V01 Created by Cvpcb (2014-10-27 BZR 5228)-product   date = 1/17/2015 11:57:42 AM
+
+BeginCmp
+TimeStamp = /54B9C95B;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LEDs:LED-1206;
+EndCmp
+
+BeginCmp
+TimeStamp = /54B70F87;
+Reference = J1;
+ValeurCmp = RJ12;
+IdModule  = Connect:RJ12_E;
+EndCmp
+
+BeginCmp
+TimeStamp = /54BA918C;
+Reference = P1;
+ValeurCmp = CONN_02X14;
+IdModule  = Socket_Strips:Socket_Strip_Straight_2x14;
+EndCmp
+
+BeginCmp
+TimeStamp = /54BA91AB;
+Reference = P2;
+ValeurCmp = CONN_02X14;
+IdModule  = Socket_Strips:Socket_Strip_Straight_2x14;
+EndCmp
+
+BeginCmp
+TimeStamp = /54B9C75F;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_1206_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /54B9C90A;
+Reference = R2;
+ValeurCmp = 330 ;
+IdModule  = Resistors_SMD:R_1206_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /54B71559;
+Reference = R3;
+ValeurCmp = 4.7K;
+IdModule  = Resistors_SMD:R_1206_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /54B92E93;
+Reference = U1;
+ValeurCmp = MICRO-SDCARD_MICRO-SDCARD;
+IdModule  = My_Library:DM3D-MicroSD;
+EndCmp
+
+BeginCmp
+TimeStamp = /54B70498;
+Reference = U2;
+ValeurCmp = TEENSY_3.1_BASIC_TEENSY_3.1_BASIC;
+IdModule  = My_Library:TEENSY_3.1_BASIC;
+EndCmp
+
+EndListe
