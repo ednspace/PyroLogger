@@ -22,7 +22,8 @@ namespace MLP
   
   struct CommandCallback 
   {
-    const prog_char *m_strSensor;
+    //const prog_char *m_strSensor;
+    const char *m_strSensor;
     void (*m_Callback)(CommandParameter &rParameters);
   };
 
@@ -58,7 +59,8 @@ namespace MLP
       if (m_uLastCommand < MAX_COMMANDS)
       {
         m_Commands[m_uLastCommand].m_Callback = CallbackFunction;
-        m_Commands[m_uLastCommand].m_strSensor = (const prog_char*)pCommand;
+        //m_Commands[m_uLastCommand].m_strSensor = (const prog_char*)pCommand;
+        m_Commands[m_uLastCommand].m_strSensor = (const char*)pCommand;
         ++m_uLastCommand;
         return true;
       }
@@ -130,7 +132,8 @@ namespace MLP
       pCommand = m_Commands;
       while(uCommand--)
       {
-        const prog_char *pchCommand = pCommand->m_strSensor;
+        //const prog_char *pchCommand = pCommand->m_strSensor;
+        const char *pchCommand = pCommand->m_strSensor;
         const char *pchTest = m_achBuffer + 1; // First element is start character.
         char chCommand, chTest;
         uParameterStart = 1;

@@ -91,6 +91,8 @@
         <word-wrap-default>true</word-wrap-default>
         <include-date>true</include-date>
         <include-time>false</include-time>
+        <include-custom>false</include-custom>
+        <custom-time-stamp />
         <clear-on-send>false</clear-on-send>
         <message-history />
       </data>
@@ -171,8 +173,8 @@
   </serial-sources>
   <windows>
     <window>
-      <position left="78" top="307" width="1160" height="690" state="Normal" />
-      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="6" ActivePane="6">
+      <position left="-18" top="2" width="1296" height="1000" state="Normal" />
+      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="2" ActivePane="2">
         <Contents Count="7">
           <Content ID="0" PersistString="VisualizerToolbox" AutoHidePortion="0.0970031545741325" IsHidden="False" IsFloat="False" />
           <Content ID="1" PersistString="mlpChart" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
@@ -203,10 +205,10 @@
               </font>
             </title>
             <x-axis>
-              <minimum>42015.75</minimum>
-              <maximum>42016.416666666511</maximum>
-              <major-step>6</major-step>
-              <minor-step>1</minor-step>
+              <minimum>42100.708333333489</minimum>
+              <maximum>42102.958333333489</maximum>
+              <major-step>12</major-step>
+              <minor-step>2</minor-step>
               <major-unit>Hour</major-unit>
               <minor-unit>Hour</minor-unit>
               <minimum-auto>true</minimum-auto>
@@ -224,10 +226,10 @@
               </font>
             </x-axis>
             <y-axis>
-              <minimum>58</minimum>
-              <maximum>76</maximum>
-              <major-step>2</major-step>
-              <minor-step>0.5</minor-step>
+              <minimum>0</minimum>
+              <maximum>110</maximum>
+              <major-step>10</major-step>
+              <minor-step>2</minor-step>
               <major-unit>Day</major-unit>
               <minor-unit>Day</minor-unit>
               <minimum-auto>true</minimum-auto>
@@ -256,10 +258,12 @@
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
             <Channel>TemperatureFeed</Channel>
+            <InsertTimestamp>true</InsertTimestamp>
             <WordWrap>true</WordWrap>
             <IncludeDate>true</IncludeDate>
             <IncludeTime>true</IncludeTime>
-            <InsertTimestamp>true</InsertTimestamp>
+            <IncludeCustom>false</IncludeCustom>
+            <CustomTimeStamp />
             <SourceId>2</SourceId>
             <TabTitle>Message Monitor</TabTitle>
           </Content>
@@ -365,10 +369,12 @@
           <Content ID="6" PersistString="SerialMonitor" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
+            <InsertTimestamp>false</InsertTimestamp>
             <WordWrap>true</WordWrap>
             <IncludeDate>true</IncludeDate>
             <IncludeTime>false</IncludeTime>
-            <InsertTimestamp>false</InsertTimestamp>
+            <IncludeCustom>false</IncludeCustom>
+            <CustomTimeStamp />
             <SourceId>2</SourceId>
             <TabTitle>Monitor</TabTitle>
           </Content>
