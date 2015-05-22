@@ -1,15 +1,15 @@
 #include <Arduino.h>
 #include <MegunoLink.h>
-#include "CommandParser.h"
-
+#include "CommandParser.h"  //A local version of this library changes from the original may exist
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
 InterfacePanel Panel;
 
+
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 2
-#define TEMPERATURE_PRECISION 9
+#define TEMPERATURE_PRECISION 12 //Not sure what this is doing yet, needs research
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -18,25 +18,51 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
 // arrays to hold device addresses
-DeviceAddress insideThermometer, outsideThermometer;
+DeviceAddress frontThermometer, backThermometer;
 
-//Setup the temparature holding variables
+//Some Variables to Hold the Temperatures
 float tempF;
 float tempC;
 float front;
 float back;
-int TempType=1; //0=Cel 1=F Default is F
+float frontAverage;
+float frontAverageArray[9];
+float backAverage[9];
+int averageCount=0;
+
+int TempType=1; //0=Celsius 1=Fahrenheit start condition - can be changed in GUI also
+int FilterData=1; //0=Filter Data is Off 1=Filter Data is on
 
 //For the Megunolink time plots
 long LastSent;  // Millis value when the data was last sent. 
-int SendInterval = 3000; // Interval (milliseconds) between sending analog data
-TimePlot PyroPlot;  // The plot we are sending data to.
+int SendInterval = 3000; // Interval (milliseconds) between sending analog data - can be changed in GUI also
+TimePlot PyroPlot;  // Name of the Meguino Plot Window where data will be sent
+
+//For the status LED
+int LED = 6;
 
 //Get the MLP command parser up and running
 MLP::CommandParser<> Parser;
 
 
-//All Thy Functions Lie ;) Below
+//All Thy Functions doth Lie ;) Below
+float rollingAverage(float *store, int size, float entry)
+{
+	int l;
+	float total = 0;
+	float result;
+
+	for(l=0; l<size-1; l++)
+	{
+		store[l] = store[l+1];
+		total += store[l];
+	}
+	store[size-1] = entry;
+	total += entry;
+	result = total / (float)size;
+
+	return result;
+}
 void DoSetTempC(MLP::CommandParameter &Parameter)
 {
   Serial.print(F("Setting TempType to C"));
@@ -64,7 +90,6 @@ void DoSampleRate(MLP::CommandParameter &Parameter)
 
   SendInterval = atoi(pchValue);
 }
-
 
 // function to print a device address
 void printAddress(DeviceAddress deviceAddress)
@@ -111,6 +136,8 @@ void setup(void)
   // start serial port
   Serial.begin(57600);
   Serial.println("Dallas Temperature IC Control Library Demo");
+  
+  pinMode(LED, OUTPUT);
 
   // Start up the library
   sensors.begin();
@@ -126,7 +153,7 @@ void setup(void)
   if (sensors.isParasitePowerMode()) Serial.println("ON");
   else Serial.println("OFF");
 
-  // assign address manually.  the addresses below will beed to be changed
+  // assign address manually.  the addresses below will need to be changed
   // to valid device addresses on your bus.  device address can be retrieved
   // by using either oneWire.search(deviceAddress) or individually via
   // sensors.getAddress(deviceAddress, index)
@@ -139,8 +166,8 @@ void setup(void)
   // the devices on your bus (and assuming they don't change).
   // 
   // method 1: by index
-  if (!sensors.getAddress(insideThermometer, 0)) Serial.println("Unable to find address for Device 0"); 
-  if (!sensors.getAddress(outsideThermometer, 1)) Serial.println("Unable to find address for Device 1"); 
+  if (!sensors.getAddress(frontThermometer, 0)) Serial.println("Unable to find address for Device 0"); 
+  if (!sensors.getAddress(backThermometer, 1)) Serial.println("Unable to find address for Device 1"); 
 
   // method 2: search()
   // search() looks for the next device. Returns 1 if a new address has been
@@ -158,23 +185,23 @@ void setup(void)
 
   // show the addresses we found on the bus
   Serial.print("Device 0 Address: ");
-  printAddress(insideThermometer);
+  printAddress(frontThermometer);
   Serial.println();
 
   Serial.print("Device 1 Address: ");
-  printAddress(outsideThermometer);
+  printAddress(backThermometer);
   Serial.println();
 
-  // set the resolution to 9 bit
-  sensors.setResolution(insideThermometer, TEMPERATURE_PRECISION);
-  sensors.setResolution(outsideThermometer, TEMPERATURE_PRECISION);
+  // set the resolution to 12 bit
+  sensors.setResolution(frontThermometer, TEMPERATURE_PRECISION);
+  sensors.setResolution(backThermometer, TEMPERATURE_PRECISION);
 
   Serial.print("Device 0 Resolution: ");
-  Serial.print(sensors.getResolution(insideThermometer), DEC); 
+  Serial.print(sensors.getResolution(frontThermometer), DEC); 
   Serial.println();
 
   Serial.print("Device 1 Resolution: ");
-  Serial.print(sensors.getResolution(outsideThermometer), DEC); 
+  Serial.print(sensors.getResolution(backThermometer), DEC); 
   Serial.println();
 
 
@@ -192,24 +219,24 @@ void loop(void)
   Parser.Process();
 
 
-  // call sensors.requestTemperatures() to issue a global temperature 
-  // request to all devices on the bus
-  //Serial.print("Requesting temperatures...");
-  //sensors.requestTemperatures(); //Might want to move this into the interval loop instead of main loop
 
-
- 
-
-
-
-  if ((millis() - LastSent) > SendInterval)
+  if ((millis() - LastSent) > SendInterval) //Enough Time Has passed so take the readings now
   {
-    LastSent = millis();
-    sensors.requestTemperatures(); //Lets try doing this call here to see if glitching goes away...
-
+    LastSent = millis(); 
+	
+	digitalWrite(LED, HIGH); //Turn on the status LED
+    sensors.requestTemperatures(); //Ask for the temperatures
+	
+	
     //Update MeguinoLinkPro Plot Window
-    tempC = sensors.getTempC(insideThermometer);
+    tempC = sensors.getTempC(frontThermometer);
     tempF = DallasTemperature::toFahrenheit(tempC);
+	
+	frontAverage=rollingAverage(frontAverageArray,9,tempF);
+	
+	
+	
+
 
     if (TempType == 0)
     	{
@@ -217,15 +244,15 @@ void loop(void)
     	}
     if (TempType == 1)
     	{
-    		front = tempF;
+    		//front = tempF;
+			front = frontAverage;
     	}
 
-
+	digitalWrite(LED, LOW); //Turn off the status LED
     PyroPlot.SendData("Front", front, TimePlot::Blue, TimePlot::Solid, 1 , TimePlot::NoMarker);
-    //front = tempF;
     
     //Update MeguinoLinkPro Plot Window
-    tempC = sensors.getTempC(outsideThermometer);
+    tempC = sensors.getTempC(backThermometer);
     tempF = DallasTemperature::toFahrenheit(tempC);
 
     if (TempType == 0)
@@ -238,7 +265,7 @@ void loop(void)
     	}
 
     PyroPlot.SendData("Back", back, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
-    //back = tempF;
+    
 
     //Print to the Message Monitor Window in MeguinoLinkPro
     Serial.print("{MESSAGE:");
@@ -250,6 +277,13 @@ void loop(void)
 	Serial.print(back);
 	Serial.println("}");
 
+
+	//Some Debug Poop
+	
+	//Serial.print("Device 0 Resolution: ");
+	//Serial.print(sensors.getResolution(frontThermometer), DEC);
+	//Serial.println();
+	
 
   }
 
