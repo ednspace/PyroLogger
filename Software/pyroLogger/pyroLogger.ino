@@ -3,13 +3,16 @@
 #include "CommandParser.h"  //A local version of this library changes from the original may exist
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <SPI.h>
+#include "SdFatConfig.h"
+#include <SdFat.h>
 
 InterfacePanel Panel;
 
 
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 2
-#define TEMPERATURE_PRECISION 12 //Not sure what this is doing yet, needs research
+#define TEMPERATURE_PRECISION 12 //Not sure what this is doing yet, needs research seems to default to 12 always
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -25,15 +28,21 @@ float tempF;
 float tempC;
 float front;
 float back;
+
+//Averaging Variables
 float frontAverage;
-float frontAverageArray[9];
-float backAverage[9];
+float backAverage;
+float frontAverageArray[25];
+float backAverageArray[25];
 int averageCount=0;
+int dataLength = 0;
 
-int TempType=1; //0=Celsius 1=Fahrenheit start condition - can be changed in GUI also
-int FilterData=1; //0=Filter Data is Off 1=Filter Data is on
+//Status Variables Control the ON off State of functionality from MeguinoLinkPro
+int averageStatus=0; //0=Averaging OFF 1=Averaging ON
+int tempStatus=1; //0=Celsius 1=Fahrenheit start condition - can be changed in GUI also
+int filterStatus=1; //0=Filter Data is Off 1=Filter Data is on
 
-//For the Megunolink time plots
+//For the MeguinoLinkPro time plots
 long LastSent;  // Millis value when the data was last sent. 
 int SendInterval = 3000; // Interval (milliseconds) between sending analog data - can be changed in GUI also
 TimePlot PyroPlot;  // Name of the Meguino Plot Window where data will be sent
@@ -66,14 +75,14 @@ float rollingAverage(float *store, int size, float entry)
 void DoSetTempC(MLP::CommandParameter &Parameter)
 {
   Serial.print(F("Setting TempType to C"));
-  TempType=0;
+  tempStatus=0;
   
 }
 
 void DoSetTempF(MLP::CommandParameter &Parameter)
 {
   Serial.print(F("Setting TempType to F"));
-  TempType=1;
+  tempStatus=1;
   
 }
 
@@ -90,6 +99,38 @@ void DoSampleRate(MLP::CommandParameter &Parameter)
 
   SendInterval = atoi(pchValue);
 }
+
+
+void DoAveragingON(MLP::CommandParameter &Parameter)
+{
+	const char *pchValue;
+
+	pchValue = Parameter.NextParameter();
+	if (pchValue == NULL)
+	{
+		Serial.println(F("Averaging Data Points missing parameter"));
+		return;
+	}
+
+	
+	Serial.println(F("Turning On Averaging"));
+	dataLength = atoi(pchValue);
+	averageStatus = 1; //Turn on the Averaging later in the code
+	
+	
+	
+}
+
+
+
+void DoAveragingOFF(MLP::CommandParameter &Parameter)
+{
+	
+	Serial.println(F("Turning OFF Averaging"));
+	averageStatus = 0; //Turn off the Averaging later in the code
+	
+}
+
 
 // function to print a device address
 void printAddress(DeviceAddress deviceAddress)
@@ -209,6 +250,8 @@ void setup(void)
   Parser.AddCommand(F("SetTempC"), DoSetTempC);
   Parser.AddCommand(F("SetTempF"), DoSetTempF);
   Parser.AddCommand(F("SampleRate"),DoSampleRate);
+  Parser.AddCommand(F("AveragingON"),DoAveragingON);
+  Parser.AddCommand(F("AveragingOFF"),DoAveragingOFF);
 }
 
 
@@ -228,44 +271,54 @@ void loop(void)
     sensors.requestTemperatures(); //Ask for the temperatures
 	
 	
-    //Update MeguinoLinkPro Plot Window
+    
     tempC = sensors.getTempC(frontThermometer);
     tempF = DallasTemperature::toFahrenheit(tempC);
 	
-	frontAverage=rollingAverage(frontAverageArray,9,tempF);
+	if (averageStatus == 1 && tempStatus == 1){
+		frontAverage=rollingAverage(frontAverageArray,dataLength,tempF);
+		front = frontAverage;
+	}
 	
+	if (averageStatus == 1 && tempStatus == 0){
+		frontAverage=rollingAverage(frontAverageArray,dataLength,tempC);
+		front = frontAverage;
+	}
 	
+	if (averageStatus == 0 && tempStatus == 1){
+		front = tempF;
+	}
 	
-
-
-    if (TempType == 0)
-    	{
-    		front = tempC;
-    	}
-    if (TempType == 1)
-    	{
-    		//front = tempF;
-			front = frontAverage;
-    	}
-
-	digitalWrite(LED, LOW); //Turn off the status LED
-    PyroPlot.SendData("Front", front, TimePlot::Blue, TimePlot::Solid, 1 , TimePlot::NoMarker);
+	if (averageStatus == 0 && tempStatus == 0){
+		front = tempC;
+	}
+	PyroPlot.SendData("Front", front, TimePlot::Blue, TimePlot::Solid, 1 , TimePlot::NoMarker);
     
     //Update MeguinoLinkPro Plot Window
     tempC = sensors.getTempC(backThermometer);
     tempF = DallasTemperature::toFahrenheit(tempC);
 
-    if (TempType == 0)
-    	{
-    		back = tempC;
-    	}
-    if (TempType == 1)
-    	{
-    		back = tempF;
-    	}
-
-    PyroPlot.SendData("Back", back, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
+    if (averageStatus == 1 && tempStatus == 1){
+	    backAverage=rollingAverage(backAverageArray,dataLength,tempF);
+	    back = backAverage;
+    }
     
+    if (averageStatus == 1 && tempStatus == 0){
+	    backAverage=rollingAverage(backAverageArray,dataLength,tempC);
+	    back = backAverage;
+    }
+    
+    if (averageStatus == 0 && tempStatus == 1){
+	    back = tempF;
+    }
+    
+    if (averageStatus == 0 && tempStatus == 0){
+	    back = tempC;
+    }
+	PyroPlot.SendData("Back", back, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
+    
+	//Turn off the Status LED
+	digitalWrite(LED, LOW); //Turn off the status LED
 
     //Print to the Message Monitor Window in MeguinoLinkPro
     Serial.print("{MESSAGE:");
