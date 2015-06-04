@@ -1,0 +1,644 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>6.2</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
+    <ProjectGuid>{07b459b4-8d76-4638-bc6d-a459ba2d616b}</ProjectGuid>
+    <avrdevice>ATmega2560</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>CPP</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>pyroLogger</AssemblyName>
+    <Name>pyroLogger</Name>
+    <RootNamespace>pyroLogger</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <OverrideVtorValue>
+    </OverrideVtorValue>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <CacheFlash>true</CacheFlash>
+    <UncachedRange />
+    <BootSegment>0</BootSegment>
+    <AsfFrameworkConfig>
+      <framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.10.1" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+    <preserveEEPROM>true</preserveEEPROM>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <AvrGccCpp>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__ARM_MK20dx256__</Value>
+      <Value>__ARM_MK20DX256__</Value>
+      <Value>ARDUINO=106</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>__AVR__</Value>
+      <Value>F_CPU=96000000</Value>
+      <Value>USB_SERIAL</Value>
+      <Value>LAYOUT_US_ENGLISH</Value>
+      <Value>__MK20DX256__</Value>
+      <Value>TEENSYDUINO=123</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include/</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/arm/include</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries</Value>
+      <Value>D:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp</Value>
+      <Value>../../pyroLogger</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__ARM_MK20dx256__</Value>
+      <Value>__ARM_MK20DX256__</Value>
+      <Value>ARDUINO=106</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>__AVR__</Value>
+      <Value>F_CPU=96000000</Value>
+      <Value>USB_SERIAL</Value>
+      <Value>LAYOUT_US_ENGLISH</Value>
+      <Value>__MK20DX256__</Value>
+      <Value>TEENSYDUINO=123</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include/</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/arm/include</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries</Value>
+      <Value>D:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp</Value>
+      <Value>../../pyroLogger</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+</AvrGccCpp>
+    </ToolchainSettings>
+    <VMSETTING_IncludePaths>C:/Users/Customer/Desktop/arduino-1.6.1/hardware/arduino/avr/cores/arduino;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/arduino/avr/variants/yun;../../pyroLogger;C:/Users/Customer/Documents/Arduino/libraries/OneWire;C:/Users/Customer/Documents/Arduino/libraries/OneWire/utility;C:/Users/Customer/Documents/Arduino/libraries/Meguinolink;C:/Users/Customer/Documents/Arduino/libraries/Meguinolink/utility;C:/Users/Customer/Documents/Arduino/libraries/DallasTemp;C:/Users/Customer/Documents/Arduino/libraries/DallasTemp/utility;C:/Users/Customer/Desktop/arduino-1.6.1/libraries;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/arduino/avr/libraries;D:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/Customer/Documents/Arduino/libraries;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/avr/include/;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/avr/include/avr/;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/avr/;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/lib/gcc/avr/4.8.1/include/;;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/teensy/avr/cores/teensy3;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/teensy/avr/libraries;C:/Users/Customer/Desktop/Desktop/include;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3/utils;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3/avr;C:/Users/Customer/Desktop/arduino-1.0.6/libraries;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/libraries;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/arm/include;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include/;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI/utility;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat/utility;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings>
+        <arduino.board.name>teensy31</arduino.board.name>
+        <arduino.board.desc>Teensy 3.1</arduino.board.desc>
+        <arduino.board.property_bag>name=Teensy 3.1
+upload.protocol=halfkay
+upload.maximum_size=262144
+upload.maximum_ram_size=65536
+upload.speed=12000000
+upload.disable_flushing=true
+bootloader.path=undefined
+serial.restart_cmd=true
+serial.safe_baud_rates_only=true
+upload.avrdude_wrapper=teensy_reboot
+build.mcu=mk20dx256
+build.cpu=cortex-m4
+build.option1=-mthumb
+build.option2=-nostdlib
+build.option3=-D__MK20DX256__
+build.option4=-DTEENSYDUINO=123
+build.cppoption1=-fno-rtti
+build.linkoption1=-mthumb
+build.linkoption2=--specs=nano.specs
+build.additionalobject1=-larm_cortexM4l_math
+build.linkscript=mk20dx256.ld
+build.architecture=arm
+build.command.gcc=arm-none-eabi-gcc
+build.command.g++=arm-none-eabi-g++
+build.command.ar=arm-none-eabi-ar
+build.command.objcopy=arm-none-eabi-objcopy
+build.command.objdump=arm-none-eabi-objdump
+build.command.size=arm-none-eabi-size
+build.core=teensy3
+build.elide_constructors=true
+build.gnu0x=true
+build.dependency=true
+build.time_t=true
+build.post_compile_script=teensy_post_compile
+menu.usb.serial.name=Serial
+menu.usb.serial.build.define0=-DUSB_SERIAL
+menu.usb.hid.name=Keyboard + Mouse + Joystick
+menu.usb.hid.build.define0=-DUSB_HID
+menu.usb.hid.fake_serial=teensy_gateway
+menu.usb.serialhid.name=Serial + Keyboard + Mouse + Joystick
+menu.usb.serialhid.build.define0=-DUSB_SERIAL_HID
+menu.usb.midi.name=MIDI
+menu.usb.midi.build.define0=-DUSB_MIDI
+menu.usb.midi.fake_serial=teensy_gateway
+menu.usb.rawhid.name=Raw HID
+menu.usb.rawhid.build.define0=-DUSB_RAWHID
+menu.usb.rawhid.fake_serial=teensy_gateway
+menu.usb.flightsim.name=Flight Sim Controls
+menu.usb.flightsim.build.define0=-DUSB_FLIGHTSIM
+menu.usb.flightsim.fake_serial=teensy_gateway
+menu.usb.disable.name=No USB
+menu.usb.disable.build.define0=-DUSB_DISABLED
+menu.speed.96.name=96 MHz (overclock)
+menu.speed.72.name=72 MHz
+menu.speed.48.name=48 MHz
+menu.speed.24.name=24 MHz
+menu.speed.16nousb.name=16 MHz (No USB)
+menu.speed.8nousb.name=8 MHz (No USB)
+menu.speed.4nousb.name=4 MHz (No USB)
+menu.speed.2nousb.name=2 MHz (No USB)
+menu.speed.168.build.f_cpu=168000000
+menu.speed.144.build.f_cpu=144000000
+menu.speed.120.build.f_cpu=120000000
+menu.speed.96.build.f_cpu=96000000
+menu.speed.72.build.f_cpu=72000000
+menu.speed.48.build.f_cpu=48000000
+menu.speed.24.build.f_cpu=24000000
+menu.speed.16nousb.build.f_cpu=16000000
+menu.speed.8nousb.build.f_cpu=8000000
+menu.speed.4nousb.build.f_cpu=4000000
+menu.speed.2nousb.build.f_cpu=2000000
+menu.keys.en-us.name=US English
+menu.keys.en-us.build.define1=-DLAYOUT_US_ENGLISH
+menu.keys.fr-ca.name=Canadian French
+menu.keys.fr-ca.build.define1=-DLAYOUT_CANADIAN_FRENCH
+menu.keys.xx-ca.name=Canadian Multilingual
+menu.keys.xx-ca.build.define1=-DLAYOUT_CANADIAN_MULTILINGUAL
+menu.keys.cz-cz.name=Czech
+menu.keys.cz-cz.build.define1=-DLAYOUT_CZECH
+menu.keys.da-da.name=Danish
+menu.keys.da-da.build.define1=-DLAYOUT_DANISH
+menu.keys.fi-fi.name=Finnish
+menu.keys.fi-fi.build.define1=-DLAYOUT_FINNISH
+menu.keys.fr-fr.name=French
+menu.keys.fr-fr.build.define1=-DLAYOUT_FRENCH
+menu.keys.fr-be.name=French Belgian
+menu.keys.fr-be.build.define1=-DLAYOUT_FRENCH_BELGIAN
+menu.keys.fr-ch.name=French Swiss
+menu.keys.fr-ch.build.define1=-DLAYOUT_FRENCH_SWISS
+menu.keys.de-de.name=German
+menu.keys.de-de.build.define1=-DLAYOUT_GERMAN
+menu.keys.de-dm.name=German (Mac)
+menu.keys.de-dm.build.define1=-DLAYOUT_GERMAN_MAC
+menu.keys.de-ch.name=German Swiss
+menu.keys.de-ch.build.define1=-DLAYOUT_GERMAN_SWISS
+menu.keys.is-is.name=Icelandic
+menu.keys.is-is.build.define1=-DLAYOUT_ICELANDIC
+menu.keys.en-ie.name=Irish
+menu.keys.en-ie.build.define1=-DLAYOUT_IRISH
+menu.keys.it-it.name=Italian
+menu.keys.it-it.build.define1=-DLAYOUT_ITALIAN
+menu.keys.no-no.name=Norwegian
+menu.keys.no-no.build.define1=-DLAYOUT_NORWEGIAN
+menu.keys.pt-pt.name=Portuguese
+menu.keys.pt-pt.build.define1=-DLAYOUT_PORTUGUESE
+menu.keys.pt-br.name=Portuguese Brazilian
+menu.keys.pt-br.build.define1=-DLAYOUT_PORTUGUESE_BRAZILIAN
+menu.keys.rs-rs.name=Serbian (Latin Only)
+menu.keys.rs-rs.build.define1=-DLAYOUT_SERBIAN_LATIN_ONLY
+menu.keys.es-es.name=Spanish
+menu.keys.es-es.build.define1=-DLAYOUT_SPANISH
+menu.keys.es-mx.name=Spanish Latin America
+menu.keys.es-mx.build.define1=-DLAYOUT_SPANISH_LATIN_AMERICA
+menu.keys.sv-se.name=Swedish
+menu.keys.sv-se.build.define1=-DLAYOUT_SWEDISH
+menu.keys.tr-tr.name=Turkish (partial)
+menu.keys.tr-tr.build.define1=-DLAYOUT_TURKISH
+menu.keys.en-gb.name=United Kingdom
+menu.keys.en-gb.build.define1=-DLAYOUT_UNITED_KINGDOM
+menu.keys.usint.name=US International
+menu.keys.usint.build.define1=-DLAYOUT_US_INTERNATIONAL
+runtime.ide.path=C:\Users\Customer\Desktop\arduino-1.0.6
+build.system.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\system
+runtime.ide.version=106
+target_package=teensy
+target_platform=avr
+runtime.hardware.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware
+originalid=teensy31
+vm.platform.root.path=D:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\teensy
+ide.location.key=Teensy
+ide.location.ide.winreg=Teensy Application
+ide.location.sketchbook.winreg=Teensy Sketchbook
+ide.location.sketchbook.preferences=sketchbook.path
+ide.location.preferences=%VM_APPDATA_ROAMING%\arduino\preferences.txt
+ide.location.sketchbook.default=%MYDOCUMENTS%\arduino
+ide.default.package=teensy
+ide.default.platform=avr
+ide.multiplatform=true
+ide.includes=arduino.h
+ide.platformswithoutpackage=true
+ide.extension=ino
+ide.extension.fallback=pde
+ide.includes.fallback=wprogram.h
+ide.exe=arduino.exe
+ide.url=http://www.pjrc.com/teensy/td_download.html
+vm.debug=true
+ide.hosts=atmel
+software=ARDUINO
+upload.serial_ignore=true
+ide.appid=teensy
+location.sketchbook=C:\Users\Customer\Documents\Arduino
+vm.core.include=arduino.h
+build.board=AVR_TEENSY31
+vm.boardsource.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy
+runtime.platform.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy
+vm.platformname.name=avr
+build.arch=AVR
+vm.runtime.compiler.showwarnings=true
+build.source.path=D:\Projects\pyroLogger\Software\pyroLogger\pyroLogger.ino
+compiler.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\tools\arm\bin\
+extra.time.local=51376294
+includes= -I"C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\cores\teensy3"  -I"C:\Users\Customer\Documents\Arduino\libraries\DallasTemp"  -I"C:\Users\Customer\Documents\Arduino\libraries\Meguinolink"  -I"C:\Users\Customer\Documents\Arduino\libraries\OneWire"  -I"C:\Users\Customer\Desktop\arduino-1.0.6\libraries\SPI"  -I"C:\Users\Customer\Desktop\arduino-1.0.6\libraries"  -I"C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\libraries"  -I"D:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers"  -I"C:\Users\Customer\Documents\Arduino\libraries"  -I"C:\Users\Customer\Documents\Arduino\libraries\Meguinolink\utility"
+build.path=C:\Users\Customer\AppData\Local\V.Micro\Arduino\Builds\pyroLogger\teensy31
+build.project_name=pyroLogger
+build.variant.path=
+build.core.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\cores\teensy3
+archive_file=core.a
+object_file=C:\Users\Customer\AppData\Local\V.Micro\Arduino\Builds\pyroLogger\teensy31\SPI\SPI.cpp.o
+source_file=C:\Users\Customer\Desktop\arduino-1.0.6\libraries\SPI\SPI.cpp
+</arduino.board.property_bag>
+        <arduino.build.mcu>mk20dx256</arduino.build.mcu>
+        <arduino.build.core>teensy3</arduino.build.core>
+        <arduino.upload.protocol>halfkay</arduino.upload.protocol>
+        <arduino.upload.maximum_size>262144</arduino.upload.maximum_size>
+        <visualmicro.application.name>teensy</visualmicro.application.name>
+        <visualmicro.package.name>teensy</visualmicro.package.name>
+        <visualmicro.platform.name>avr</visualmicro.platform.name>
+        <arduino.upload.port>COM29</arduino.upload.port>
+        <arduino.build.f_cpu>
+        </arduino.build.f_cpu>
+        <arduino.upload.speed>12000000</arduino.upload.speed>
+        <VM_ADDITIONAL_PREPROC>F_CPU=96000000;USB_SERIAL;LAYOUT_US_ENGLISH</VM_ADDITIONAL_PREPROC>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <AvrGccCpp>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__ARM_MK20dx256__</Value>
+      <Value>__ARM_MK20DX256__</Value>
+      <Value>ARDUINO=106</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>__AVR__</Value>
+      <Value>F_CPU=96000000</Value>
+      <Value>USB_SERIAL</Value>
+      <Value>LAYOUT_US_ENGLISH</Value>
+      <Value>__MK20DX256__</Value>
+      <Value>TEENSYDUINO=123</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include/</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/arm/include</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries</Value>
+      <Value>D:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp</Value>
+      <Value>../../pyroLogger</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__ARM_MK20dx256__</Value>
+      <Value>__ARM_MK20DX256__</Value>
+      <Value>ARDUINO=106</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>__AVR__</Value>
+      <Value>F_CPU=96000000</Value>
+      <Value>USB_SERIAL</Value>
+      <Value>LAYOUT_US_ENGLISH</Value>
+      <Value>__MK20DX256__</Value>
+      <Value>TEENSYDUINO=123</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include/</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/arm/include</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries</Value>
+      <Value>D:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat/utility</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/OneWire</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/Meguinolink</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp/utility</Value>
+      <Value>C:/Users/Customer/Documents/Arduino/libraries/DallasTemp</Value>
+      <Value>../../pyroLogger</Value>
+      <Value>C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+</AvrGccCpp>
+    </ToolchainSettings>
+    <VMSETTING_IncludePaths>C:/Users/Customer/Desktop/arduino-1.6.1/hardware/arduino/avr/cores/arduino;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/arduino/avr/variants/yun;../../pyroLogger;C:/Users/Customer/Documents/Arduino/libraries/OneWire;C:/Users/Customer/Documents/Arduino/libraries/OneWire/utility;C:/Users/Customer/Documents/Arduino/libraries/Meguinolink;C:/Users/Customer/Documents/Arduino/libraries/Meguinolink/utility;C:/Users/Customer/Documents/Arduino/libraries/DallasTemp;C:/Users/Customer/Documents/Arduino/libraries/DallasTemp/utility;C:/Users/Customer/Desktop/arduino-1.6.1/libraries;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/arduino/avr/libraries;D:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/Customer/Documents/Arduino/libraries;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/avr/include/;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/avr/include/avr/;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/avr/;c:/users/customer/desktop/arduino-1.6.1/hardware/tools/avr/lib/gcc/avr/4.8.1/include/;;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/teensy/avr/cores/teensy3;C:/Users/Customer/Desktop/arduino-1.6.1/hardware/teensy/avr/libraries;C:/Users/Customer/Desktop/Desktop/include;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3/utils;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/cores/teensy3/avr;C:/Users/Customer/Desktop/arduino-1.0.6/libraries;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/teensy/libraries;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/arm/include;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include;C:/Users/Customer/Desktop/arduino-1.0.6/hardware/tools/arm/lib/gcc/arm-none-eabi/4.8.4/include/;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SPI/utility;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat;C:/Users/Customer/Desktop/arduino-1.0.6/libraries/SdFat/utility;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings>
+        <arduino.board.name>teensy31</arduino.board.name>
+        <arduino.board.desc>Teensy 3.1</arduino.board.desc>
+        <arduino.board.property_bag>name=Teensy 3.1
+upload.protocol=halfkay
+upload.maximum_size=262144
+upload.maximum_ram_size=65536
+upload.speed=12000000
+upload.disable_flushing=true
+bootloader.path=undefined
+serial.restart_cmd=true
+serial.safe_baud_rates_only=true
+upload.avrdude_wrapper=teensy_reboot
+build.mcu=mk20dx256
+build.cpu=cortex-m4
+build.option1=-mthumb
+build.option2=-nostdlib
+build.option3=-D__MK20DX256__
+build.option4=-DTEENSYDUINO=123
+build.cppoption1=-fno-rtti
+build.linkoption1=-mthumb
+build.linkoption2=--specs=nano.specs
+build.additionalobject1=-larm_cortexM4l_math
+build.linkscript=mk20dx256.ld
+build.architecture=arm
+build.command.gcc=arm-none-eabi-gcc
+build.command.g++=arm-none-eabi-g++
+build.command.ar=arm-none-eabi-ar
+build.command.objcopy=arm-none-eabi-objcopy
+build.command.objdump=arm-none-eabi-objdump
+build.command.size=arm-none-eabi-size
+build.core=teensy3
+build.elide_constructors=true
+build.gnu0x=true
+build.dependency=true
+build.time_t=true
+build.post_compile_script=teensy_post_compile
+menu.usb.serial.name=Serial
+menu.usb.serial.build.define0=-DUSB_SERIAL
+menu.usb.hid.name=Keyboard + Mouse + Joystick
+menu.usb.hid.build.define0=-DUSB_HID
+menu.usb.hid.fake_serial=teensy_gateway
+menu.usb.serialhid.name=Serial + Keyboard + Mouse + Joystick
+menu.usb.serialhid.build.define0=-DUSB_SERIAL_HID
+menu.usb.midi.name=MIDI
+menu.usb.midi.build.define0=-DUSB_MIDI
+menu.usb.midi.fake_serial=teensy_gateway
+menu.usb.rawhid.name=Raw HID
+menu.usb.rawhid.build.define0=-DUSB_RAWHID
+menu.usb.rawhid.fake_serial=teensy_gateway
+menu.usb.flightsim.name=Flight Sim Controls
+menu.usb.flightsim.build.define0=-DUSB_FLIGHTSIM
+menu.usb.flightsim.fake_serial=teensy_gateway
+menu.usb.disable.name=No USB
+menu.usb.disable.build.define0=-DUSB_DISABLED
+menu.speed.96.name=96 MHz (overclock)
+menu.speed.72.name=72 MHz
+menu.speed.48.name=48 MHz
+menu.speed.24.name=24 MHz
+menu.speed.16nousb.name=16 MHz (No USB)
+menu.speed.8nousb.name=8 MHz (No USB)
+menu.speed.4nousb.name=4 MHz (No USB)
+menu.speed.2nousb.name=2 MHz (No USB)
+menu.speed.168.build.f_cpu=168000000
+menu.speed.144.build.f_cpu=144000000
+menu.speed.120.build.f_cpu=120000000
+menu.speed.96.build.f_cpu=96000000
+menu.speed.72.build.f_cpu=72000000
+menu.speed.48.build.f_cpu=48000000
+menu.speed.24.build.f_cpu=24000000
+menu.speed.16nousb.build.f_cpu=16000000
+menu.speed.8nousb.build.f_cpu=8000000
+menu.speed.4nousb.build.f_cpu=4000000
+menu.speed.2nousb.build.f_cpu=2000000
+menu.keys.en-us.name=US English
+menu.keys.en-us.build.define1=-DLAYOUT_US_ENGLISH
+menu.keys.fr-ca.name=Canadian French
+menu.keys.fr-ca.build.define1=-DLAYOUT_CANADIAN_FRENCH
+menu.keys.xx-ca.name=Canadian Multilingual
+menu.keys.xx-ca.build.define1=-DLAYOUT_CANADIAN_MULTILINGUAL
+menu.keys.cz-cz.name=Czech
+menu.keys.cz-cz.build.define1=-DLAYOUT_CZECH
+menu.keys.da-da.name=Danish
+menu.keys.da-da.build.define1=-DLAYOUT_DANISH
+menu.keys.fi-fi.name=Finnish
+menu.keys.fi-fi.build.define1=-DLAYOUT_FINNISH
+menu.keys.fr-fr.name=French
+menu.keys.fr-fr.build.define1=-DLAYOUT_FRENCH
+menu.keys.fr-be.name=French Belgian
+menu.keys.fr-be.build.define1=-DLAYOUT_FRENCH_BELGIAN
+menu.keys.fr-ch.name=French Swiss
+menu.keys.fr-ch.build.define1=-DLAYOUT_FRENCH_SWISS
+menu.keys.de-de.name=German
+menu.keys.de-de.build.define1=-DLAYOUT_GERMAN
+menu.keys.de-dm.name=German (Mac)
+menu.keys.de-dm.build.define1=-DLAYOUT_GERMAN_MAC
+menu.keys.de-ch.name=German Swiss
+menu.keys.de-ch.build.define1=-DLAYOUT_GERMAN_SWISS
+menu.keys.is-is.name=Icelandic
+menu.keys.is-is.build.define1=-DLAYOUT_ICELANDIC
+menu.keys.en-ie.name=Irish
+menu.keys.en-ie.build.define1=-DLAYOUT_IRISH
+menu.keys.it-it.name=Italian
+menu.keys.it-it.build.define1=-DLAYOUT_ITALIAN
+menu.keys.no-no.name=Norwegian
+menu.keys.no-no.build.define1=-DLAYOUT_NORWEGIAN
+menu.keys.pt-pt.name=Portuguese
+menu.keys.pt-pt.build.define1=-DLAYOUT_PORTUGUESE
+menu.keys.pt-br.name=Portuguese Brazilian
+menu.keys.pt-br.build.define1=-DLAYOUT_PORTUGUESE_BRAZILIAN
+menu.keys.rs-rs.name=Serbian (Latin Only)
+menu.keys.rs-rs.build.define1=-DLAYOUT_SERBIAN_LATIN_ONLY
+menu.keys.es-es.name=Spanish
+menu.keys.es-es.build.define1=-DLAYOUT_SPANISH
+menu.keys.es-mx.name=Spanish Latin America
+menu.keys.es-mx.build.define1=-DLAYOUT_SPANISH_LATIN_AMERICA
+menu.keys.sv-se.name=Swedish
+menu.keys.sv-se.build.define1=-DLAYOUT_SWEDISH
+menu.keys.tr-tr.name=Turkish (partial)
+menu.keys.tr-tr.build.define1=-DLAYOUT_TURKISH
+menu.keys.en-gb.name=United Kingdom
+menu.keys.en-gb.build.define1=-DLAYOUT_UNITED_KINGDOM
+menu.keys.usint.name=US International
+menu.keys.usint.build.define1=-DLAYOUT_US_INTERNATIONAL
+runtime.ide.path=C:\Users\Customer\Desktop\arduino-1.0.6
+build.system.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\system
+runtime.ide.version=106
+target_package=teensy
+target_platform=avr
+runtime.hardware.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware
+originalid=teensy31
+vm.platform.root.path=D:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\teensy
+ide.location.key=Teensy
+ide.location.ide.winreg=Teensy Application
+ide.location.sketchbook.winreg=Teensy Sketchbook
+ide.location.sketchbook.preferences=sketchbook.path
+ide.location.preferences=%VM_APPDATA_ROAMING%\arduino\preferences.txt
+ide.location.sketchbook.default=%MYDOCUMENTS%\arduino
+ide.default.package=teensy
+ide.default.platform=avr
+ide.multiplatform=true
+ide.includes=arduino.h
+ide.platformswithoutpackage=true
+ide.extension=ino
+ide.extension.fallback=pde
+ide.includes.fallback=wprogram.h
+ide.exe=arduino.exe
+ide.url=http://www.pjrc.com/teensy/td_download.html
+vm.debug=true
+ide.hosts=atmel
+software=ARDUINO
+upload.serial_ignore=true
+ide.appid=teensy
+location.sketchbook=C:\Users\Customer\Documents\Arduino
+vm.core.include=arduino.h
+build.board=AVR_TEENSY31
+vm.boardsource.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy
+runtime.platform.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy
+vm.platformname.name=avr
+build.arch=AVR
+vm.runtime.compiler.showwarnings=true
+build.source.path=D:\Projects\pyroLogger\Software\pyroLogger\pyroLogger.ino
+compiler.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\tools\arm\bin\
+extra.time.local=51376294
+includes= -I"C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\cores\teensy3"  -I"C:\Users\Customer\Documents\Arduino\libraries\DallasTemp"  -I"C:\Users\Customer\Documents\Arduino\libraries\Meguinolink"  -I"C:\Users\Customer\Documents\Arduino\libraries\OneWire"  -I"C:\Users\Customer\Desktop\arduino-1.0.6\libraries\SPI"  -I"C:\Users\Customer\Desktop\arduino-1.0.6\libraries"  -I"C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\libraries"  -I"D:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers"  -I"C:\Users\Customer\Documents\Arduino\libraries"  -I"C:\Users\Customer\Documents\Arduino\libraries\Meguinolink\utility"
+build.path=C:\Users\Customer\AppData\Local\V.Micro\Arduino\Builds\pyroLogger\teensy31
+build.project_name=pyroLogger
+build.variant.path=
+build.core.path=C:\Users\Customer\Desktop\arduino-1.0.6\hardware\teensy\cores\teensy3
+archive_file=core.a
+object_file=C:\Users\Customer\AppData\Local\V.Micro\Arduino\Builds\pyroLogger\teensy31\SPI\SPI.cpp.o
+source_file=C:\Users\Customer\Desktop\arduino-1.0.6\libraries\SPI\SPI.cpp
+</arduino.board.property_bag>
+        <arduino.build.mcu>mk20dx256</arduino.build.mcu>
+        <arduino.build.core>teensy3</arduino.build.core>
+        <arduino.upload.protocol>halfkay</arduino.upload.protocol>
+        <arduino.upload.maximum_size>262144</arduino.upload.maximum_size>
+        <visualmicro.application.name>teensy</visualmicro.application.name>
+        <visualmicro.package.name>teensy</visualmicro.package.name>
+        <visualmicro.platform.name>avr</visualmicro.platform.name>
+        <arduino.upload.port>COM29</arduino.upload.port>
+        <arduino.build.f_cpu>
+        </arduino.build.f_cpu>
+        <arduino.upload.speed>12000000</arduino.upload.speed>
+        <VM_ADDITIONAL_PREPROC>F_CPU=96000000;USB_SERIAL;LAYOUT_US_ENGLISH</VM_ADDITIONAL_PREPROC>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="pyroLogger.ino">
+      <SubType>compile</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Visual Micro\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Average.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CommandParser.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CommandParser.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Visual Micro\.pyroLogger.vsarduino.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>
