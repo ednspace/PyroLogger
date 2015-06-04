@@ -4,10 +4,11 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <SPI.h>
-#include "SdFatConfig.h"
 #include <SdFat.h>
 
 InterfacePanel Panel;
+SdFat sd;
+SdFile myFile;
 
 
 // Data wire is plugged into port 2 on the Arduino
@@ -41,6 +42,8 @@ int dataLength = 0;
 int averageStatus=0; //0=Averaging OFF 1=Averaging ON
 int tempStatus=1; //0=Celsius 1=Fahrenheit start condition - can be changed in GUI also
 int filterStatus=1; //0=Filter Data is Off 1=Filter Data is on
+int loggingStatus=0; //0=Logging is Off 1=Filter Logging is on
+int fileCounter = 0;
 
 //For the MeguinoLinkPro time plots
 long LastSent;  // Millis value when the data was last sent. 
@@ -72,10 +75,13 @@ float rollingAverage(float *store, int size, float entry)
 
 	return result;
 }
+
 void DoSetTempC(MLP::CommandParameter &Parameter)
 {
   Serial.print(F("Setting TempType to C"));
   tempStatus=0;
+  
+      DoStatusUpdate();
   
 }
 
@@ -83,6 +89,10 @@ void DoSetTempF(MLP::CommandParameter &Parameter)
 {
   Serial.print(F("Setting TempType to F"));
   tempStatus=1;
+  
+      DoStatusUpdate();
+  
+  
   
 }
 
@@ -98,8 +108,9 @@ void DoSampleRate(MLP::CommandParameter &Parameter)
   }
 
   SendInterval = atoi(pchValue);
+  
+  DoStatusUpdate();
 }
-
 
 void DoAveragingON(MLP::CommandParameter &Parameter)
 {
@@ -117,11 +128,11 @@ void DoAveragingON(MLP::CommandParameter &Parameter)
 	dataLength = atoi(pchValue);
 	averageStatus = 1; //Turn on the Averaging later in the code
 	
+	DoStatusUpdate();
+	
 	
 	
 }
-
-
 
 void DoAveragingOFF(MLP::CommandParameter &Parameter)
 {
@@ -129,6 +140,126 @@ void DoAveragingOFF(MLP::CommandParameter &Parameter)
 	Serial.println(F("Turning OFF Averaging"));
 	averageStatus = 0; //Turn off the Averaging later in the code
 	
+	DoStatusUpdate();
+	
+}
+
+void DoLoggingOFF(MLP::CommandParameter &Parameter)
+{
+	
+	Serial.println(F("Turning OFF Logging"));
+	loggingStatus = 0; //Turn off logging later in the code
+	
+	DoStatusUpdate();
+	
+	
+	
+}
+
+void DoLogggingON(MLP::CommandParameter &Parameter)
+{
+	
+	Serial.println(F("Turning ON Logging"));
+	// initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
+	// breadboards.  use SPI_FULL_SPEED for better performance.
+	if (!sd.begin (10, SPI_HALF_SPEED))
+	  {
+		  Serial.println(F("SD Communication Error"));
+		  return;  // failed to start
+	  }
+	loggingStatus = 1; //Turn on Logging later in the code
+	fileCounter = 0; //Reset the file counter
+	
+	DoStatusUpdate();
+	
+	
+}
+
+void DoStatusUpdate(){
+	//Update Status Table
+	
+	//Clear the Table
+	Serial.print("{TABLE");
+		Serial.print("|CLEAR|");
+	Serial.println("}");
+	
+	
+	//Update Table Temperature Status
+	if (tempStatus == 1){
+		Serial.print("{TABLE");
+			Serial.print("|SET|");
+			Serial.print("Temperature");
+			Serial.print("|");
+			Serial.print("Fahrenheit");
+		Serial.println("}");
+	}
+	if (tempStatus == 0){
+		Serial.print("{TABLE");
+			Serial.print("|SET|");
+			Serial.print("Temperature");
+			Serial.print("|");
+			Serial.print("Celcius");
+		Serial.println("}");
+	}
+	
+	//Update Table Sample Rate
+	Serial.print("{TABLE");
+		Serial.print("|SET|");
+		Serial.print("Sample Rate");
+		Serial.print("|");
+		Serial.print(SendInterval / 1000);
+		Serial.print("|");
+		Serial.print("Seconds");
+		
+		
+	Serial.println("}");
+	
+	
+	//Update Table Average Status
+	if (averageStatus == 1){
+		Serial.print("{TABLE");
+			Serial.print("|SET|");
+			Serial.print("Averaging");
+			Serial.print("|");
+			Serial.print("ON");
+			Serial.print("|");
+			Serial.print("Points ");
+			Serial.print(dataLength);
+		Serial.println("}");
+	}
+	
+	if (averageStatus == 0) {
+		Serial.print("{TABLE");
+			Serial.print("|CLEAR|");
+			Serial.print("Averaging");
+		Serial.println("}");
+		
+		Serial.print("{TABLE");
+			Serial.print("|SET|");
+			Serial.print("Averaging");
+			Serial.print("|");
+			Serial.print("OFF");
+		Serial.println("}");
+	}
+	
+	//Update Table Logging Status
+	if (loggingStatus == 1) {
+		Serial.print("{TABLE");
+			Serial.print("|SET|");
+			Serial.print("SD Logging");
+			Serial.print("|");
+			Serial.print("ON");
+		Serial.println("}");
+	}
+	
+	if (loggingStatus == 0) {
+		Serial.print("{TABLE");
+			Serial.print("|SET|");
+			Serial.print("SD Logging");
+			Serial.print("|");
+			Serial.print("OFF");
+		Serial.println("}");
+	}
 }
 
 
@@ -252,7 +383,13 @@ void setup(void)
   Parser.AddCommand(F("SampleRate"),DoSampleRate);
   Parser.AddCommand(F("AveragingON"),DoAveragingON);
   Parser.AddCommand(F("AveragingOFF"),DoAveragingOFF);
-}
+  Parser.AddCommand(F("LoggingOFF"),DoLoggingOFF);
+  Parser.AddCommand(F("LoggingON"),DoLogggingON);
+  
+ 
+	  
+  }
+
 
 
 
@@ -265,7 +402,7 @@ void loop(void)
 
   if ((millis() - LastSent) > SendInterval) //Enough Time Has passed so take the readings now
   {
-    LastSent = millis(); 
+     
 	
 	digitalWrite(LED, HIGH); //Turn on the status LED
     sensors.requestTemperatures(); //Ask for the temperatures
@@ -316,9 +453,26 @@ void loop(void)
 	    back = tempC;
     }
 	PyroPlot.SendData("Back", back, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
+	
+	if (loggingStatus == 1){
+		// open the file for write at end like the Native SD library
+		if (!myFile.open ("pyro.txt",  O_CREAT | O_WRITE | O_APPEND))
+		{
+			Serial.println(F("File Error"));
+			return;  // failed to start
+		}
+		
+        myFile.print(fileCounter);
+		myFile.print (",     ");
+		myFile.print(front);
+		myFile.print (",     ");
+		myFile.print (back);
+		myFile.println();
+		myFile.close();
+		fileCounter = fileCounter + 1;
+	}
     
-	//Turn off the Status LED
-	digitalWrite(LED, LOW); //Turn off the status LED
+	
 
     //Print to the Message Monitor Window in MeguinoLinkPro
     Serial.print("{MESSAGE:");
@@ -329,7 +483,16 @@ void loop(void)
     Serial.print("\tBack ");
 	Serial.print(back);
 	Serial.println("}");
-
+	
+	
+     DoStatusUpdate();
+	 
+	 //Turn off the Status LED
+	 digitalWrite(LED, LOW); //Turn off the status LED
+	 
+	 //Reset Millis here at the end for more accurate timing
+	 LastSent = millis();
+     
 
 	//Some Debug Poop
 	

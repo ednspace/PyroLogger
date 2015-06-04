@@ -14,6 +14,9 @@
       <allow-close>true</allow-close>
       <allow-source-selection>true</allow-source-selection>
       <allow-channel-selection>true</allow-channel-selection>
+      <show-source-selector>true</show-source-selector>
+      <show-examples-button>true</show-examples-button>
+      <show-help-button>true</show-help-button>
       <custom>
         <policy id="DataTable">
           <allow-source-selection>Inherit</allow-source-selection>
@@ -173,9 +176,9 @@
   </serial-sources>
   <windows>
     <window>
-      <position left="-18" top="2" width="1296" height="1000" state="Normal" />
-      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="2" ActivePane="2">
-        <Contents Count="7">
+      <position left="-8" top="-8" width="1296" height="1000" state="Maximized" />
+      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="3" ActivePane="3">
+        <Contents Count="8">
           <Content ID="0" PersistString="VisualizerToolbox" AutoHidePortion="0.0970031545741325" IsHidden="False" IsFloat="False" />
           <Content ID="1" PersistString="mlpChart" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>false</ShowSourceInTitle>
@@ -205,8 +208,8 @@
               </font>
             </title>
             <x-axis>
-              <minimum>42100.708333333489</minimum>
-              <maximum>42102.958333333489</maximum>
+              <minimum>42156.625</minimum>
+              <maximum>42158.583333333489</maximum>
               <major-step>12</major-step>
               <minor-step>2</minor-step>
               <major-unit>Hour</major-unit>
@@ -226,10 +229,10 @@
               </font>
             </x-axis>
             <y-axis>
-              <minimum>0</minimum>
-              <maximum>110</maximum>
-              <major-step>10</major-step>
-              <minor-step>2</minor-step>
+              <minimum>60</minimum>
+              <maximum>95</maximum>
+              <major-step>5</major-step>
+              <minor-step>1</minor-step>
               <major-unit>Day</major-unit>
               <minor-unit>Day</minor-unit>
               <minimum-auto>true</minimum-auto>
@@ -246,15 +249,14 @@
                 <size>14</size>
               </font>
             </y-axis>
+            <background-fill>
+              <color-1>-1</color-1>
+              <color-2>-46</color-2>
+              <angle>-45</angle>
+            </background-fill>
             <run>false</run>
           </Content>
-          <Content ID="2" PersistString="SourceManager" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
-            <ShowSourceInTitle>true</ShowSourceInTitle>
-            <ShowPortInTitle>false</ShowPortInTitle>
-            <SourceId>2</SourceId>
-            <TabTitle>Connection Manager</TabTitle>
-          </Content>
-          <Content ID="3" PersistString="MessageStreamViewer" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
+          <Content ID="2" PersistString="MessageStreamViewer" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
             <Channel>TemperatureFeed</Channel>
@@ -267,7 +269,7 @@
             <SourceId>2</SourceId>
             <TabTitle>Message Monitor</TabTitle>
           </Content>
-          <Content ID="4" PersistString="FileWriter" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
+          <Content ID="3" PersistString="FileWriter" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
             <Channel>TemperatureFeed</Channel>
@@ -281,28 +283,104 @@
             <SourceId>2</SourceId>
             <TabTitle>Message Logger</TabTitle>
           </Content>
-          <Content ID="5" PersistString="InterfacePanel" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
+          <Content ID="4" PersistString="InterfacePanel" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
             <design type="InterfacePanel">
               <children child-list="Controls">
-                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.1.1406.2804, Culture=neutral, PublicKeyToken=null" name="IPButton3">
+                <component type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label4">
+                  <properties>
+                    <property name="Text">SD Card Logging</property>
+                    <property name="Font">Microsoft Sans Serif, 12pt, style=Bold</property>
+                    <property name="ForeColor">Blue</property>
+                    <property name="Location">15, 198</property>
+                    <property name="Name">Label4</property>
+                    <property name="Size">153, 23</property>
+                    <property name="TabIndex">12</property>
+                  </properties>
+                </component>
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton7">
+                  <properties>
+                    <property name="OnClickSend">!LoggingOFF\r</property>
+                    <property name="Text">SD Logging OFF</property>
+                    <property name="Location">121, 224</property>
+                    <property name="Name">IPButton7</property>
+                    <property name="Size">100, 25</property>
+                    <property name="TabIndex">11</property>
+                  </properties>
+                </component>
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton6">
+                  <properties>
+                    <property name="OnClickSend">!LoggingON\r</property>
+                    <property name="Text">SD Logging ON</property>
+                    <property name="Location">15, 224</property>
+                    <property name="Name">IPButton6</property>
+                    <property name="Size">100, 25</property>
+                    <property name="TabIndex">10</property>
+                  </properties>
+                </component>
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton5">
+                  <properties>
+                    <property name="OnClickSend">!AveragingOFF\r</property>
+                    <property name="Text">Averaging OFF</property>
+                    <property name="Location">177, 163</property>
+                    <property name="Name">IPButton5</property>
+                    <property name="Size">87, 23</property>
+                    <property name="TabIndex">9</property>
+                  </properties>
+                </component>
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton4">
+                  <properties>
+                    <property name="OnClickSend">!AveragingON [DataPoints.Value]\r</property>
+                    <property name="Text">Averaging ON</property>
+                    <property name="Location">87, 163</property>
+                    <property name="Name">IPButton4</property>
+                    <property name="Size">84, 23</property>
+                    <property name="TabIndex">8</property>
+                  </properties>
+                </component>
+                <component type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label3">
+                  <properties>
+                    <property name="Text">Moving Average Filter</property>
+                    <property name="Font">Microsoft Sans Serif, 12pt, style=Bold</property>
+                    <property name="ForeColor">Blue</property>
+                    <property name="Location">15, 137</property>
+                    <property name="Name">Label3</property>
+                    <property name="Size">192, 23</property>
+                    <property name="TabIndex">7</property>
+                  </properties>
+                </component>
+                <component type="IPControlLibrary.Controls.IPNumericUpDown, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="DataPoints">
+                  <children child-list="Controls" />
+                  <properties>
+                    <property name="OnValueChangedSend" />
+                    <property name="Maximum">25</property>
+                    <property name="Minimum">1</property>
+                    <property name="Value">1</property>
+                    <property name="Location">15, 163</property>
+                    <property name="Name">DataPoints</property>
+                    <property name="Size">64, 20</property>
+                    <property name="TabIndex">6</property>
+                  </properties>
+                </component>
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton3">
                   <properties>
                     <property name="OnClickSend">!SampleRate [SampleRate.Value*1000]\r</property>
                     <property name="Text">Set SampleRate</property>
-                    <property name="Location">141, 141</property>
+                    <property name="Location">141, 103</property>
                     <property name="Name">IPButton3</property>
                     <property name="Size">106, 23</property>
                     <property name="TabIndex">5</property>
                   </properties>
                 </component>
-                <component type="IPControlLibrary.Controls.IPNumericUpDown, IPControlLibrary, Version=1.1.1406.2804, Culture=neutral, PublicKeyToken=null" name="SampleRate">
+                <component type="IPControlLibrary.Controls.IPNumericUpDown, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="SampleRate">
                   <children child-list="Controls" />
                   <properties>
+                    <property name="OnValueChangedSend" />
                     <property name="Maximum">600</property>
                     <property name="Minimum">1</property>
                     <property name="Value">1</property>
-                    <property name="Location">15, 141</property>
+                    <property name="Location">15, 103</property>
                     <property name="Name">SampleRate</property>
                     <property name="Size">120, 20</property>
                     <property name="TabIndex">4</property>
@@ -313,7 +391,7 @@
                     <property name="Text">Sample Rate</property>
                     <property name="Font">Microsoft Sans Serif, 12pt, style=Bold</property>
                     <property name="ForeColor">Blue</property>
-                    <property name="Location">15, 114</property>
+                    <property name="Location">15, 77</property>
                     <property name="Name">Label2</property>
                     <property name="Size">153, 23</property>
                     <property name="TabIndex">3</property>
@@ -321,16 +399,16 @@
                 </component>
                 <component type="System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label1">
                   <properties>
-                    <property name="Text">Temperature</property>
+                    <property name="Text">Temperature Scale</property>
                     <property name="Font">Microsoft Sans Serif, 12pt, style=Bold</property>
                     <property name="ForeColor">Blue</property>
                     <property name="Location">15, 15</property>
                     <property name="Name">Label1</property>
-                    <property name="Size">153, 23</property>
+                    <property name="Size">170, 23</property>
                     <property name="TabIndex">2</property>
                   </properties>
                 </component>
-                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.1.1406.2804, Culture=neutral, PublicKeyToken=null" name="IPButton2">
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton2">
                   <properties>
                     <property name="OnClickSend">!SetTempF\r</property>
                     <property name="Text">Fahrenheit</property>
@@ -340,11 +418,11 @@
                     <property name="TabIndex">1</property>
                   </properties>
                 </component>
-                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.1.1406.2804, Culture=neutral, PublicKeyToken=null" name="IPButton1">
+                <component type="IPControlLibrary.Controls.IPButton, IPControlLibrary, Version=1.2.1505.1505, Culture=neutral, PublicKeyToken=null" name="IPButton1">
                   <properties>
                     <property name="OnClickSend">!SetTempC\r</property>
                     <property name="Text">Celcius</property>
-                    <property name="Location">15, 70</property>
+                    <property name="Location">96, 41</property>
                     <property name="Name">IPButton1</property>
                     <property name="Size">75, 23</property>
                     <property name="TabIndex">0</property>
@@ -354,19 +432,22 @@
               <properties>
                 <property name="ForeColor">Desktop</property>
                 <property name="Name">UserControl1</property>
-                <property name="Size">472, 450</property>
+                <property name="Size">527, 575</property>
               </properties>
               <components />
             </design>
             <values>
+              <value name="DataPoints">
+                <property name="Value"><![CDATA[20]]></property>
+              </value>
               <value name="SampleRate">
-                <property name="Value"><![CDATA[1]]></property>
+                <property name="Value"><![CDATA[10]]></property>
               </value>
             </values>
             <SourceId>2</SourceId>
             <TabTitle>Interface Panel</TabTitle>
           </Content>
-          <Content ID="6" PersistString="SerialMonitor" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
+          <Content ID="5" PersistString="SerialMonitor" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
             <InsertTimestamp>false</InsertTimestamp>
@@ -378,8 +459,25 @@
             <SourceId>2</SourceId>
             <TabTitle>Monitor</TabTitle>
           </Content>
+          <Content ID="6" PersistString="DataTable" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
+            <ShowSourceInTitle>true</ShowSourceInTitle>
+            <ShowPortInTitle>false</ShowPortInTitle>
+            <SourceId>2</SourceId>
+            <TabTitle>Table</TabTitle>
+            <reporting-enabled>false</reporting-enabled>
+            <reporting>
+              <filename-pattern>Table {Seq}</filename-pattern>
+              <format>HTML</format>
+            </reporting>
+          </Content>
+          <Content ID="7" PersistString="SourceManager" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
+            <ShowSourceInTitle>true</ShowSourceInTitle>
+            <ShowPortInTitle>false</ShowPortInTitle>
+            <SourceId>-1</SourceId>
+            <TabTitle>Connection Manager</TabTitle>
+          </Content>
         </Contents>
-        <Panes Count="7">
+        <Panes Count="8">
           <Pane ID="0" DockState="DockRightAutoHide" ActiveContent="0">
             <Contents Count="1">
               <Content ID="0" RefID="0" />
@@ -387,44 +485,50 @@
           </Pane>
           <Pane ID="1" DockState="Document" ActiveContent="1">
             <Contents Count="2">
-              <Content ID="0" RefID="6" />
+              <Content ID="0" RefID="5" />
               <Content ID="1" RefID="1" />
             </Contents>
           </Pane>
-          <Pane ID="2" DockState="Document" ActiveContent="3">
-            <Contents Count="1">
-              <Content ID="0" RefID="3" />
-            </Contents>
-          </Pane>
-          <Pane ID="3" DockState="Float" ActiveContent="-1">
+          <Pane ID="2" DockState="Document" ActiveContent="2">
             <Contents Count="1">
               <Content ID="0" RefID="2" />
             </Contents>
           </Pane>
-          <Pane ID="4" DockState="Document" ActiveContent="2">
-            <Contents Count="1">
-              <Content ID="0" RefID="2" />
-            </Contents>
-          </Pane>
-          <Pane ID="5" DockState="Document" ActiveContent="4">
+          <Pane ID="3" DockState="Document" ActiveContent="4">
             <Contents Count="1">
               <Content ID="0" RefID="4" />
             </Contents>
           </Pane>
-          <Pane ID="6" DockState="Document" ActiveContent="5">
+          <Pane ID="4" DockState="Float" ActiveContent="-1">
             <Contents Count="1">
-              <Content ID="0" RefID="5" />
+              <Content ID="0" RefID="3" />
+            </Contents>
+          </Pane>
+          <Pane ID="5" DockState="Document" ActiveContent="3">
+            <Contents Count="1">
+              <Content ID="0" RefID="3" />
+            </Contents>
+          </Pane>
+          <Pane ID="6" DockState="Document" ActiveContent="7">
+            <Contents Count="1">
+              <Content ID="0" RefID="7" />
+            </Contents>
+          </Pane>
+          <Pane ID="7" DockState="Document" ActiveContent="6">
+            <Contents Count="1">
+              <Content ID="0" RefID="6" />
             </Contents>
           </Pane>
         </Panes>
         <DockWindows>
           <DockWindow ID="0" DockState="Document" ZOrderIndex="0">
-            <NestedPanes Count="5">
+            <NestedPanes Count="6">
               <Pane ID="0" RefID="1" PrevPane="-1" Alignment="Right" Proportion="0.5" />
               <Pane ID="1" RefID="2" PrevPane="1" Alignment="Bottom" Proportion="0.413357589569847" />
-              <Pane ID="2" RefID="4" PrevPane="2" Alignment="Right" Proportion="0.328685258964144" />
-              <Pane ID="3" RefID="5" PrevPane="4" Alignment="Bottom" Proportion="0.69158724942491" />
-              <Pane ID="4" RefID="6" PrevPane="2" Alignment="Right" Proportion="0.479785969084423" />
+              <Pane ID="2" RefID="5" PrevPane="2" Alignment="Right" Proportion="0.178087649402391" />
+              <Pane ID="3" RefID="3" PrevPane="2" Alignment="Right" Proportion="0.479785969084423" />
+              <Pane ID="4" RefID="6" PrevPane="5" Alignment="Top" Proportion="0.5" />
+              <Pane ID="5" RefID="7" PrevPane="3" Alignment="Right" Proportion="0.432926829268293" />
             </NestedPanes>
           </DockWindow>
           <DockWindow ID="1" DockState="DockLeft" ZOrderIndex="1">
@@ -443,9 +547,9 @@
           </DockWindow>
         </DockWindows>
         <FloatWindows Count="1">
-          <FloatWindow ID="0" Bounds="41, 603, 300, 300" ZOrderIndex="0">
+          <FloatWindow ID="0" Bounds="971, 713, 300, 300" ZOrderIndex="0">
             <NestedPanes Count="1">
-              <Pane ID="0" RefID="3" PrevPane="-1" Alignment="Right" Proportion="0.5" />
+              <Pane ID="0" RefID="4" PrevPane="-1" Alignment="Right" Proportion="0.5" />
             </NestedPanes>
           </FloatWindow>
         </FloatWindows>
@@ -456,13 +560,13 @@
     <generate-scheduled-reports>false</generate-scheduled-reports>
     <destinations>
       <report-to-folder>
-        <last-report-number>0</last-report-number>
+        <last-report-number>2</last-report-number>
         <folder-path>C:\Users\Customer\Dropbox\pyroLoggerGraphs</folder-path>
-        <use-sub-folder>true</use-sub-folder>
+        <use-sub-folder>false</use-sub-folder>
         <sub-folder-pattern>Report {Seq}</sub-folder-pattern>
         <enabled>true</enabled>
         <period>PT1H</period>
-        <last-sent>2014-10-13T13:37:21.1537882-04:00</last-sent>
+        <last-sent>2015-06-02T20:49:46.8911091-04:00</last-sent>
       </report-to-folder>
     </destinations>
   </reporting>
