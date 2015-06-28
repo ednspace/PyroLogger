@@ -16,7 +16,7 @@ The most recent version of the hardware uses the Teensy 3.1 for the microcontrol
  for the amazing [MegunoLink](http://www.megunolink.com/).
  While buying modular hardware and using software that requires a modest licensing fee adds to the overall build cost it makes the 
  hardware and software a bit more accessible to the novice experimenter. 
- Hopefully this will enable more people to get at there kiln data and improve there future firings and learn from the ones they have done in the past.
+ Hopefully this will enable more people to get at their kiln data and improve their future firings and learn from the ones they have done in the past.
 
 ![Image of populated board](/Images/2015-05-17 10.10.42.jpg)
 ![Image of 3D enclosure split open](/Images/2015-05-30 19.18.52.jpg)
