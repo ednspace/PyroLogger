@@ -21,6 +21,9 @@ The most recent version of the hardware uses the Teensy 3.1 for the microcontrol
 ![Image of populated board](/Images/2015-05-17 10.10.42.jpg)
 ![Image of 3D enclosure split open](/Images/2015-05-30 19.18.52.jpg)
 ![Image of 3D enclosure closed up](/Images/2015-05-30 19.26.21.jpg)
+![Image of the sensor board in the phone box](/Images/2015-05-30 19.07.14.jpg)
+![Image of the GUI](/Images/Screenshot 2015-06-28 18.45.21.png)
+![Image of zoomed in Tempeh graph](/Images/tempeh JUNE-1-2015-Zoom.png)
 
 History
 -----

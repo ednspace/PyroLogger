@@ -1,3 +1,9 @@
+Hardware Lives Here
+---------
+
+The folder Pyrologger_V3_KiCad contains the latest board files. Its a daughter board for 
+the teensy 3.1 that has connections for the thermocouple sensors and an SD card.
+
 The folder ds2760-pcb contains the orginal board files for the pyrometer 
 sensor. The chip is a ds2760 lithium ion battery monitor from Maxim now 
 Dallas Semiconductor.  It uses the one wire bus to get the mv drop over 
