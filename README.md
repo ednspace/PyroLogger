@@ -20,7 +20,7 @@ The most recent version of the hardware uses the Teensy 3.1 for the microcontrol
 
 ![Image of populated board](/Images/2015-05-17 10.10.42.jpg)
 ![Image of 3D enclosure split open](/Images/2015-05-30 19.18.52.jpg)
-![Image of 3D enclosure closed up](/Images/2015-05-30 19.18.52.jpg)
+![Image of 3D enclosure closed up](/Images/2015-05-30 19.26.21.jpg)
 
 History
 -----
