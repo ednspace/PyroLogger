@@ -1,6 +1,5 @@
 For when you the Pyro, needs to log!!!
 ======================================
-Copyright Eric Daine 2015<br/>
 
 Summary
 ----
@@ -12,7 +11,7 @@ varying degrees of success. Most attempts are preserved here for posterity sake.
 The Current Version
 -----------
 The most recent version of the hardware uses the Teensy 3.1 for the microcontroller, a custom made daughter board that has an SD card and phone jack
- to connect the sensors. The sensors are [MAX31855 from Adafruit](http://www.adafruit.com/product/269). The GUI is now handled with a customized interface
+ to connect the sensors. The sensors are [MAX31850K from Adafruit](http://www.adafruit.com/products/1727). The GUI is now handled with a customized interface
  for the amazing [MegunoLink](http://www.megunolink.com/).
  While buying modular hardware and using software that requires a modest licensing fee adds to the overall build cost it makes the 
  hardware and software a bit more accessible to the novice experimenter. 
