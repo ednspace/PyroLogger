@@ -2,17 +2,21 @@
 #include <MegunoLink.h>
 #include "CommandParser.h"  //A local version of this library changes from the original may exist
 #include <OneWire.h>
-#include <DallasTemperature.h>
+#include "DallasTemperature.h"
 #include <SPI.h>
-#include <SdFat.h>
+//#include <SdFat.h>
 
 InterfacePanel Panel;
-SdFat sd;
-SdFile myFile;
+//SdFat sd;
+//SdFile myFile;
+
+
 
 
 // Data wire is plugged into port 2 on the Arduino
 #define ONE_WIRE_BUS 2
+//#define ONE_WIRE_BUS 3
+
 #define TEMPERATURE_PRECISION 12 //Not sure what this is doing yet, needs research seems to default to 12 always
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
@@ -23,6 +27,7 @@ DallasTemperature sensors(&oneWire);
 
 // arrays to hold device addresses
 DeviceAddress frontThermometer, backThermometer;
+uint8_t myScratchpad;
 
 //Some Variables to Hold the Temperatures
 float tempF;
@@ -156,6 +161,7 @@ void DoLoggingOFF(MLP::CommandParameter &Parameter)
 	
 }
 
+/*
 void DoLogggingON(MLP::CommandParameter &Parameter)
 {
 	
@@ -174,6 +180,7 @@ void DoLogggingON(MLP::CommandParameter &Parameter)
 	
 	
 }
+*/
 
 void DoStatusUpdate(){
 	//Update Status Table
@@ -274,6 +281,14 @@ void printAddress(DeviceAddress deviceAddress)
   }
 }
 
+// function to read the scratchpad for a device
+void printScratchpad(DeviceAddress deviceAddress,uint8_t* myScratchpad)
+{
+	sensors.readScratchPad(deviceAddress,myScratchpad);
+	//Serial.print("Temp C: ");
+	
+}
+
 // function to print the temperature for a device
 void printTemperature(DeviceAddress deviceAddress)
 {
@@ -313,7 +328,7 @@ void setup(void)
 
   // Start up the library
   sensors.begin();
-
+delay(5000);
   // locate devices on the bus
   Serial.print("Locating devices...");
   Serial.print("Found ");
@@ -383,8 +398,8 @@ void setup(void)
   Parser.AddCommand(F("SampleRate"),DoSampleRate);
   Parser.AddCommand(F("AveragingON"),DoAveragingON);
   Parser.AddCommand(F("AveragingOFF"),DoAveragingOFF);
-  Parser.AddCommand(F("LoggingOFF"),DoLoggingOFF);
-  Parser.AddCommand(F("LoggingON"),DoLogggingON);
+ // Parser.AddCommand(F("LoggingOFF"),DoLoggingOFF);
+ // Parser.AddCommand(F("LoggingON"),DoLogggingON);
   
  
 	  
@@ -453,7 +468,7 @@ void loop(void)
 	    back = tempC;
     }
 	PyroPlot.SendData("Back", back, TimePlot::Red, TimePlot::Solid, 1 , TimePlot::NoMarker);
-	
+/*
 	if (loggingStatus == 1){
 		// open the file for write at end like the Native SD library
 		if (!myFile.open ("pyro.txt",  O_CREAT | O_WRITE | O_APPEND))
@@ -461,16 +476,16 @@ void loop(void)
 			Serial.println(F("File Error"));
 			return;  // failed to start
 		}
-		
-        myFile.print(fileCounter);
+	        myFile.print(fileCounter);
 		myFile.print (",     ");
-		myFile.print(front);
+  	myFile.print(front);
 		myFile.print (",     ");
 		myFile.print (back);
 		myFile.println();
 		myFile.close();
 		fileCounter = fileCounter + 1;
 	}
+ */
     
 	
 

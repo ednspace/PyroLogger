@@ -49,18 +49,6 @@
           <allow-edit-wordwrap>true</allow-edit-wordwrap>
           <allow-edit-timestamp>true</allow-edit-timestamp>
         </policy>
-        <policy id="SourceManager">
-          <allow-source-selection>Inherit</allow-source-selection>
-          <allow-channel-selection>Inherit</allow-channel-selection>
-          <allow-edit-baud>true</allow-edit-baud>
-          <allow-edit-advanced>true</allow-edit-advanced>
-          <allow-delete>true</allow-delete>
-          <allow-edit-autoconnect>true</allow-edit-autoconnect>
-          <allow-new-source>true</allow-new-source>
-          <allow-edit-name>true</allow-edit-name>
-          <allow-reset>true</allow-reset>
-          <allow-udp-port-change>true</allow-udp-port-change>
-        </policy>
         <policy id="InterfacePanel">
           <allow-source-selection>Inherit</allow-source-selection>
           <allow-channel-selection>Inherit</allow-channel-selection>
@@ -164,20 +152,22 @@
         <auto-connect>true</auto-connect>
         <port-name>
           <type>Fixed</type>
-          <port>COM29</port>
+          <port>COM3</port>
         </port-name>
         <baud-rate>57600</baud-rate>
         <data-bits>8</data-bits>
         <handshaking>None</handshaking>
         <parity>None</parity>
         <stop-bits>One</stop-bits>
+        <disable-dtr>false</disable-dtr>
       </source>
     </sources>
+    <connect-sources />
   </serial-sources>
   <windows>
     <window>
-      <position left="-8" top="-8" width="1296" height="1000" state="Maximized" />
-      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="3" ActivePane="3">
+      <position left="-8" top="-8" width="1616" height="876" state="Maximized" />
+      <DockPanel FormatVersion="1.0" DockLeftPortion="0.15" DockRightPortion="0.0970031545741325" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="1" ActivePane="1">
         <Contents Count="8">
           <Content ID="0" PersistString="VisualizerToolbox" AutoHidePortion="0.0970031545741325" IsHidden="False" IsFloat="False" />
           <Content ID="1" PersistString="mlpChart" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
@@ -187,7 +177,10 @@
             <TabTitle>pyroLoggerPlot</TabTitle>
             <reporting-enabled>true</reporting-enabled>
             <show-summary>true</show-summary>
-            <active-channels />
+            <Channels>
+              <auto>true</auto>
+              <default>true</default>
+            </Channels>
             <reporting>
               <width>1640</width>
               <height>480</height>
@@ -208,14 +201,14 @@
               </font>
             </title>
             <x-axis>
-              <minimum>42156.625</minimum>
-              <maximum>42158.583333333489</maximum>
-              <major-step>12</major-step>
-              <minor-step>2</minor-step>
+              <minimum>42514.180874926882</minimum>
+              <maximum>42514.395184789668</maximum>
+              <major-step>1</major-step>
+              <minor-step>15</minor-step>
               <major-unit>Hour</major-unit>
-              <minor-unit>Hour</minor-unit>
-              <minimum-auto>true</minimum-auto>
-              <maximum-auto>true</maximum-auto>
+              <minor-unit>Minute</minor-unit>
+              <minimum-auto>false</minimum-auto>
+              <maximum-auto>false</maximum-auto>
               <major-step-auto>true</major-step-auto>
               <minor-step-auto>true</minor-step-auto>
               <text>Time</text>
@@ -229,14 +222,14 @@
               </font>
             </x-axis>
             <y-axis>
-              <minimum>60</minimum>
-              <maximum>95</maximum>
-              <major-step>5</major-step>
-              <minor-step>1</minor-step>
+              <minimum>48.42422136859102</minimum>
+              <maximum>57.738567768272027</maximum>
+              <major-step>1</major-step>
+              <minor-step>0.2</minor-step>
               <major-unit>Day</major-unit>
               <minor-unit>Day</minor-unit>
-              <minimum-auto>true</minimum-auto>
-              <maximum-auto>true</maximum-auto>
+              <minimum-auto>false</minimum-auto>
+              <maximum-auto>false</maximum-auto>
               <major-step-auto>true</major-step-auto>
               <minor-step-auto>true</minor-step-auto>
               <text>Temperature</text>
@@ -259,20 +252,30 @@
           <Content ID="2" PersistString="MessageStreamViewer" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
-            <Channel>TemperatureFeed</Channel>
+            <Channels>
+              <auto>true</auto>
+              <default>true</default>
+            </Channels>
             <InsertTimestamp>true</InsertTimestamp>
             <WordWrap>true</WordWrap>
             <IncludeDate>true</IncludeDate>
             <IncludeTime>true</IncludeTime>
             <IncludeCustom>false</IncludeCustom>
             <CustomTimeStamp />
+            <AutoScroll>false</AutoScroll>
+            <ShowEOLMarkers>false</ShowEOLMarkers>
+            <ShowLineTime>false</ShowLineTime>
+            <ShowLineDate>false</ShowLineDate>
             <SourceId>2</SourceId>
             <TabTitle>Message Monitor</TabTitle>
           </Content>
           <Content ID="3" PersistString="FileWriter" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
             <ShowPortInTitle>false</ShowPortInTitle>
-            <Channel>TemperatureFeed</Channel>
+            <Channels>
+              <auto>true</auto>
+              <default>true</default>
+            </Channels>
             <file-path>
               <path>C:\Users\Customer\Desktop\tempeh1.txt</path>
               <relative>false</relative>
@@ -282,6 +285,7 @@
             <InsertTimestamp>true</InsertTimestamp>
             <SourceId>2</SourceId>
             <TabTitle>Message Logger</TabTitle>
+            <reporting-enabled>false</reporting-enabled>
           </Content>
           <Content ID="4" PersistString="InterfacePanel" AutoHidePortion="0.25" IsHidden="False" IsFloat="False">
             <ShowSourceInTitle>true</ShowSourceInTitle>
@@ -441,7 +445,7 @@
                 <property name="Value"><![CDATA[20]]></property>
               </value>
               <value name="SampleRate">
-                <property name="Value"><![CDATA[10]]></property>
+                <property name="Value"><![CDATA[1]]></property>
               </value>
             </values>
             <SourceId>2</SourceId>
@@ -456,6 +460,10 @@
             <IncludeTime>false</IncludeTime>
             <IncludeCustom>false</IncludeCustom>
             <CustomTimeStamp />
+            <AutoScroll>false</AutoScroll>
+            <ShowEOLMarkers>false</ShowEOLMarkers>
+            <ShowLineTime>false</ShowLineTime>
+            <ShowLineDate>false</ShowLineDate>
             <SourceId>2</SourceId>
             <TabTitle>Monitor</TabTitle>
           </Content>
@@ -465,6 +473,10 @@
             <SourceId>2</SourceId>
             <TabTitle>Table</TabTitle>
             <reporting-enabled>false</reporting-enabled>
+            <Channels>
+              <auto>true</auto>
+              <default>true</default>
+            </Channels>
             <reporting>
               <filename-pattern>Table {Seq}</filename-pattern>
               <format>HTML</format>
@@ -557,16 +569,16 @@
     </window>
   </windows>
   <reporting>
-    <generate-scheduled-reports>false</generate-scheduled-reports>
+    <generate-scheduled-reports>true</generate-scheduled-reports>
     <destinations>
       <report-to-folder>
-        <last-report-number>2</last-report-number>
-        <folder-path>C:\Users\Customer\Dropbox\pyroLoggerGraphs</folder-path>
-        <use-sub-folder>false</use-sub-folder>
-        <sub-folder-pattern>Report {Seq}</sub-folder-pattern>
+        <last-report-number>65</last-report-number>
+        <folder-path>C:\Users\Customer\Dropbox\greenHouse</folder-path>
+        <use-sub-folder>true</use-sub-folder>
+        <sub-folder-pattern>{Date}</sub-folder-pattern>
         <enabled>true</enabled>
         <period>PT1H</period>
-        <last-sent>2015-06-02T20:49:46.8911091-04:00</last-sent>
+        <last-sent>2016-05-24T07:37:09.6615246-04:00</last-sent>
       </report-to-folder>
     </destinations>
   </reporting>
